@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/springbootlearning-config-autoconfig.iml" filepath="$PROJECT_DIR$/springbootlearning-config-autoconfig.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rental-system.iml" filepath="$PROJECT_DIR$/rental-system.iml" />
     </modules>
   </component>
 </project>

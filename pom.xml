@@ -11,7 +11,7 @@
     <groupId>com.suke.SpringBootLearning</groupId>
     <artifactId>springbootlearning</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springbootlearning</name>
+    <name>rental-system</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
