@@ -6,8 +6,9 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
 
 server:
-  context-path: /rental-system
   port: 8082
+  servlet:
+    context-path: /rental-system
 
 qiniuyun:
         ak: T5XQB_CwNFrIdhVvTClo66SdRdUhGPIt6K2iFE4Y
