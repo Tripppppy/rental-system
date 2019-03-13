@@ -1,4 +1,4 @@
-package com.suke.springbootlearning;
+package utils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
