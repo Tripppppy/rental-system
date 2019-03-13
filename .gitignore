@@ -65,6 +65,7 @@ local.properties
 *.ids
 *.orig
 classes/
+/.idea
 
 ######################
 # Visual Studio Code
