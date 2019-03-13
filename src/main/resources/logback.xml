@@ -22,7 +22,7 @@
         </appender>
     -->
 
-    <logger name="com.suke" level="INFO"/>
+    <logger name="com.suke.RentalSystem" level="INFO"/>
 
     <root level="WARN">
         <appender-ref ref="CONSOLE"/>
