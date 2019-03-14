@@ -8,8 +8,5 @@ import java.util.List;
 
 @Component
 public interface UserMapper {
-
-    public List<User> searchUser(@Param("name") String name, @Param("password") String password);
-
-
+    List<User> searchUser(@Param("name") String name, @Param("password") String password);
 }

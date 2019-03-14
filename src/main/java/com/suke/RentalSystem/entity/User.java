@@ -1,10 +1,15 @@
 package com.suke.RentalSystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 public class User {
+
+    @Id
     private int id;
     private String login_name;
     private String name;

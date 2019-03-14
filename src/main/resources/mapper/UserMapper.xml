@@ -43,7 +43,7 @@
     </resultMap>
 
     <!--登录-->
-    <select id="searchUser" resultType="User">
+    <select id="searchUser" resultMap="User">
         select * from tbl_user where login_name=#{name} and password=#{password}
     </select>
 

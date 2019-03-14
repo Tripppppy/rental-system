@@ -5,7 +5,5 @@ import com.suke.RentalSystem.entity.User;
 import java.util.List;
 
 public interface UserService {
-    public List<User> searchUser(String name,String password);
-
-
+    List<User> searchUser(String name,String password);
 }

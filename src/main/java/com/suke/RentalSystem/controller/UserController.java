@@ -14,15 +14,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     UserService userService;
+
     @GetMapping("/login")
-    public Result login(@RequestBody User user){
+    public Result login(){
         String name = "666";
         String password = "123";
         List<User> list = userService.searchUser(name,password);
-
-
         return new Result(true,"success",null);
     }
 
