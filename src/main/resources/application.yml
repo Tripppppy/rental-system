@@ -7,3 +7,6 @@ spring:
       add-mappings: false
     freemarker:
       checkTemplateLocation: false
+      mybatis:
+        typeAliasesPackage: com.suke.RentalSystem.entity
+        mapperLocations: classpath:mapper/*.xml
