@@ -9,7 +9,6 @@ import java.util.Date;
 
 public class User {
 
-    @Id
     private int id;
     private String login_name;
     private String name;
