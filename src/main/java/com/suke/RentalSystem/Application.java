@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 @SpringBootApplication
 @EnableAutoConfiguration
 @ComponentScan
-@MapperScan("com.suke.RentalSystem.mapper")
+@MapperScan(value = "com.suke.RentalSystem.mapper")
 @EnableTransactionManagement(proxyTargetClass = true)
 public class Application {
 

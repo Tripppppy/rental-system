@@ -2,59 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.suke.RentalSystem.mapper.UserMapper">
-
-    <resultMap type="com.suke.RentalSystem.entity.User" id="User">
-        <id column="id" property="id"/>
-        <result column="login_name" property="login_name"/>
-        <result column="name" property="name"/>
-        <result column="mobile" property="mobile"/>
-        <result column="email" property="email"/>
-        <result column="image_url" property="image_url"/>
-        <result column="status" property="status"/>
-        <result column="password" property="password"/>
-        <result column="created_by" property="created_by"/>
-        <result column="created_date" property="created_date"/>
-        <result column="last_modified_by" property="last_modified_by"/>
-        <result column="last_modified_date" property="last_modified_date"/>
-        <result column="status" property="status"/>
-        <result column="version" property="version"/>
-        <!--<result property="department" javaType="com.bocloud.training.bean.Department"/>-->
-        <!--<association property="department" javaType="com.bocloud.training.bean.Department">-->
-            <!--<id column="dep_id" property="deptId"/>-->
-            <!--<result column="dep_name" property="deptName"/>-->
-        <!--</association>-->
-        <!--<association property="employee" select="findList" column="h_id" javaType="com.bocloud.training.bean.Employee"/>-->
-        <!--<association property="role" javaType="com.bocloud.training.bean.Role">-->
-            <!--<id column="role_id" property="roleId"/>-->
-            <!--<result column="role_name" property="roleName"/>-->
-        <!--</association>-->
-        <!--<association property="company" javaType="com.bocloud.training.bean.Company">-->
-            <!--<id column="comp_id" property="compId"/>-->
-            <!--<result column="comp_name" property="compName"/>-->
-        <!--</association>-->
-        <!--<association property="grade" javaType="com.bocloud.training.bean.Grade">-->
-            <!--<id column="gra_id" property="graId"/>-->
-            <!--<result column="gra_name" property="graName"/>-->
-        <!--</association>-->
-        <!--<association property="position" javaType="com.bocloud.training.bean.Position">-->
-            <!--<id column="posi_id" property="positionName"/>-->
-            <!--<result column="posi_name" property="positionName"/>-->
-        <!--</association>-->
-    </resultMap>
-
-    <!--登录-->
-    <select id="searchUser" resultMap="User">
-        select * from tbl_user where login_name=#{name} and password=#{password}
+    <select id="searchUser" resultMap="com.suke.RentalSystem.entity.User">
+        SELECT * FROM tbl_user WHERE login_name=#{name} AND password=#{password}
+    </select>
+    
+    <select id="ListUser" resultMap="com.suke.RentalSystem.entity.User">
+        SELECT * from tbl_user
     </select>
 
-    <!--&lt;!&ndash;封装sql&ndash;&gt;-->
-    <!--<sql id="select1">-->
-        <!--select e.emp_id,e.emp_name,e.phone_num,e.d_id,d.dep_id,d.dep_name,e.email,e.h_id,e.r_id,r.role_id,r.role_name,e.birth_day,e.hire_day,e.gender,e.status-->
-        <!--from employee e-->
-    <!--</sql>-->
-    <!--<sql id="select2">-->
-         <!--left join department d on e.d_id=d.dep_id left join role r on e.r_id=r.role_id-->
-    <!--</sql>-->
+    <select id="insertUser" resultMap="com.suke.RentalSystem.entity.User">
+        insert into tbl_user(login_name,name,password,mobile,email,password) values (#{loginName},#{name},#{password}
+        ,#{mobile},#{email},#{password})
+    </select>
 
-
+    <select id="deleteUser" resultMap="com.suke.RentalSystem.entity.User">
+        delete * from tbl_user where login_name = #{loginName}
+    </select>
+    
+    <select id="updateUser" resultMap="com.suke.RentalSystem.entity.User">
+        update tbl_user set name=#{name} where login_name = #{loginName}
+    </select>
 </mapper>

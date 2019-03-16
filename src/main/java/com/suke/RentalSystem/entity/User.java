@@ -1,28 +1,21 @@
 package com.suke.RentalSystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalTime;
 
 public class User {
 
     private int id;
-    private String login_name;
+    private String loginName;
     private String name;
     private String mobile;
     private String email;
-    private String image_url;
+    private String imageUrl;
     private String status;
     private String password;
-    private int created_by;
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private  Date created_date;
-    private int last_modified_by;
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private Date last_modified_date;
+    private int createdBy;
+    private LocalTime createdDate;
+    private int lastModifiedBy;
+    private LocalTime lastModifiedDate;
     private int version;
 
     public int getId() {
@@ -33,12 +26,12 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin_name() {
-        return login_name;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setLogin_name(String login_name) {
-        this.login_name = login_name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getName() {
@@ -65,12 +58,12 @@ public class User {
         this.email = email;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getStatus() {
@@ -89,36 +82,36 @@ public class User {
         this.password = password;
     }
 
-    public int getCreated_by() {
-        return created_by;
+    public int getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreated_by(int created_by) {
-        this.created_by = created_by;
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Date getCreated_date() {
-        return created_date;
+    public LocalTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreated_date(Date created_date) {
-        this.created_date = created_date;
+    public void setCreatedDate(LocalTime createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public int getLast_modified_by() {
-        return last_modified_by;
+    public int getLastModifiedBy() {
+        return lastModifiedBy;
     }
 
-    public void setLast_modified_by(int last_modified_by) {
-        this.last_modified_by = last_modified_by;
+    public void setLastModifiedBy(int lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
-    public Date getLast_modified_date() {
-        return last_modified_date;
+    public LocalTime getLastModifiedDate() {
+        return lastModifiedDate;
     }
 
-    public void setLast_modified_date(Date last_modified_date) {
-        this.last_modified_date = last_modified_date;
+    public void setLastModifiedDate(LocalTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public int getVersion() {
@@ -133,17 +126,17 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", login_name='" + login_name + '\'' +
+                ", loginName='" + loginName + '\'' +
                 ", name='" + name + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
-                ", image_url='" + image_url + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 ", status='" + status + '\'' +
                 ", password='" + password + '\'' +
-                ", created_by=" + created_by +
-                ", created_date=" + created_date +
-                ", last_modified_by=" + last_modified_by +
-                ", last_modified_date=" + last_modified_date +
+                ", createdBy=" + createdBy +
+                ", createdDate=" + createdDate +
+                ", lastModifiedBy=" + lastModifiedBy +
+                ", lastModifiedDate=" + lastModifiedDate +
                 ", version=" + version +
                 '}';
     }
