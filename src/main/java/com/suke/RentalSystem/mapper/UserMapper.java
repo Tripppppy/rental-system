@@ -10,11 +10,11 @@ import java.util.List;
 public interface UserMapper {
     List<User> searchUser(@Param("name") String name, @Param("password") String password);
 
-    List<User> ListUser();
+    List<User> listUser(@Param("page") int page,@Param("size") int size);
 
-    public User insertUser(User user);
+     User insertUser(User user);
 
-    public int deleteUser(String loginName);
+     int deleteUser(int id);
 
-    public User updateUser(User user);
+     User updateUser(User user);
 }

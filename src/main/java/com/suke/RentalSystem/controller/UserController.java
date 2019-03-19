@@ -14,6 +14,7 @@ import java.util.List;
 
     @Autowired
     UserService userService;
+
     @GetMapping("/login")
     public Result login(){
         String loginName = "666";
@@ -23,30 +24,29 @@ import java.util.List;
     }
 
 
-    //所有用户：
-    public List<User> ListUser(){
-        return userService.ListUser();
+    //分页用户：
+  @GetMapping("/listUser")
+    public List<User> listUser(int page,int size){
+        return userService.listUser(page,size);
     }
 
     //添加用户：
-    public User insertUer(User user){
+  @GetMapping("/insertUser")
+    public User insertUer(@RequestBody User user){
         return  userService.insertUser(user);
     }
 
     //删除用户：
-    public int deleteUser(String loginName){
-        return  userService.deleteUser(loginName);
+  @GetMapping("/deleteUser")
+    public int deleteUser(int id){
+        return  userService.deleteUser(id);
     }
 
     //更新用户：
+  @GetMapping("/updateUser")
     public User updateUser(User user){
         return  userService.updateUser(user);
     }
-
-
-
-
-
 
 
 }

@@ -1,6 +1,7 @@
 package com.suke.RentalSystem.entity;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+
 
 public class User {
 
@@ -13,131 +14,131 @@ public class User {
     private String status;
     private String password;
     private int createdBy;
-    private LocalTime createdDate;
+    private LocalDateTime createdDate;
     private int lastModifiedBy;
-    private LocalTime lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
     private int version;
 
-    public int getId() {
-        return id;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public String getLoginName() {
-        return loginName;
-    }
+  public String getLoginName() {
+    return loginName;
+  }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
+  public void setLoginName(String loginName) {
+    this.loginName = loginName;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getMobile() {
-        return mobile;
-    }
+  public String getMobile() {
+    return mobile;
+  }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-    public String getStatus() {
-        return status;
-    }
+  public String getStatus() {
+    return status;
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public int getCreatedBy() {
-        return createdBy;
-    }
+  public int getCreatedBy() {
+    return createdBy;
+  }
 
-    public void setCreatedBy(int createdBy) {
-        this.createdBy = createdBy;
-    }
+  public void setCreatedBy(int createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public LocalTime getCreatedDate() {
-        return createdDate;
-    }
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
+  }
 
-    public void setCreatedDate(LocalTime createdDate) {
-        this.createdDate = createdDate;
-    }
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
+  }
 
-    public int getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+  public int getLastModifiedBy() {
+    return lastModifiedBy;
+  }
 
-    public void setLastModifiedBy(int lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+  public void setLastModifiedBy(int lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 
-    public LocalTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+  public LocalDateTime getLastModifiedDate() {
+    return lastModifiedDate;
+  }
 
-    public void setLastModifiedDate(LocalTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
 
-    public int getVersion() {
-        return version;
-    }
+  public int getVersion() {
+    return version;
+  }
 
-    public void setVersion(int version) {
-        this.version = version;
-    }
+  public void setVersion(int version) {
+    this.version = version;
+  }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", loginName='" + loginName + '\'' +
-                ", name='" + name + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", email='" + email + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", status='" + status + '\'' +
-                ", password='" + password + '\'' +
-                ", createdBy=" + createdBy +
-                ", createdDate=" + createdDate +
-                ", lastModifiedBy=" + lastModifiedBy +
-                ", lastModifiedDate=" + lastModifiedDate +
-                ", version=" + version +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "User{" +
+      "id=" + id +
+      ", loginName='" + loginName + '\'' +
+      ", name='" + name + '\'' +
+      ", mobile='" + mobile + '\'' +
+      ", email='" + email + '\'' +
+      ", imageUrl='" + imageUrl + '\'' +
+      ", status='" + status + '\'' +
+      ", password='" + password + '\'' +
+      ", createdBy=" + createdBy +
+      ", createdDate=" + createdDate +
+      ", lastModifiedBy=" + lastModifiedBy +
+      ", lastModifiedDate=" + lastModifiedDate +
+      ", version=" + version +
+      '}';
+  }
 }

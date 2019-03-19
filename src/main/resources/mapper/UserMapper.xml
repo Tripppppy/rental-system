@@ -2,24 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.suke.RentalSystem.mapper.UserMapper">
-    <select id="searchUser" resultMap="com.suke.RentalSystem.entity.User">
+  <resultMap id="User" type="com.suke.RentalSystem.entity.User">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+    <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="email" jdbcType="VARCHAR" property="email"/>
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl"/>
+    <result column="status" jdbcType="VARCHAR" property="status"/>
+    <result column="password" jdbcType="VARCHAR" property="password"/>
+    <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+    <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy"/>
+    <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate"/>
+    <result column="version" jdbcType="BIGINT" property="version"/>
+  </resultMap>
+    <select id="searchUser" resultMap="User">
         SELECT * FROM tbl_user WHERE login_name=#{name} AND password=#{password}
     </select>
-    
-    <select id="ListUser" resultMap="com.suke.RentalSystem.entity.User">
+
+    <select id="listUser" resultMap="User">
         SELECT * from tbl_user
     </select>
 
-    <select id="insertUser" resultMap="com.suke.RentalSystem.entity.User">
-        insert into tbl_user(login_name,name,password,mobile,email,password) values (#{loginName},#{name},#{password}
-        ,#{mobile},#{email},#{password})
+
+    <select id="insertUser" resultMap="User">
+        insert into tbl_user(login_name,name,mobile,email,image_url,status,password) values (#{loginName},#{name},#{mobile},#{email},#{imageUrl},#{status},#{password})
     </select>
 
-    <select id="deleteUser" resultMap="com.suke.RentalSystem.entity.User">
+    <select id="deleteUser" resultMap="User">
         delete * from tbl_user where login_name = #{loginName}
     </select>
-    
-    <select id="updateUser" resultMap="com.suke.RentalSystem.entity.User">
-        update tbl_user set name=#{name} where login_name = #{loginName}
-    </select>
+
+    <select id="updateUser" resultMap="User">
+        update tbl_user set login_name=#{loginName},name=#{name},mobile=#{mobile},email=#{email},image_url=#{imageUrl},
+        status=#{status},password=#{password},created_by=#{createdBy},created_date=#{createdDate},last_modified_by=#{lastModifiedBy}
+        ,last_modified_date=#{lastModifiedDate},version=#{version} where id = #{id}
+</select>
+
 </mapper>
+

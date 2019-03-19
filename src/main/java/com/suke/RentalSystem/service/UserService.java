@@ -8,6 +8,6 @@ public interface UserService {
     List<User> searchUser(String loginName,String password);
     User insertUser(User user);
     User updateUser(User user);
-    int deleteUser(String loginName);
-    List<User> ListUser();
+    int deleteUser(int id);
+    List<User> listUser(int page,int size);
 }

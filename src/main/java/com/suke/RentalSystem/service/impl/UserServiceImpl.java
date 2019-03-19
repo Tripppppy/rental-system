@@ -23,40 +23,16 @@ public class UserServiceImpl implements UserService {
         return userMapper.insertUser(user);
 
     }
-    public List<User> ListUser(){
-        return userMapper.ListUser();
+    public List<User> listUser(int page,int size){
+        return userMapper.listUser(page,size);
     }
     public User updateUser(User user){
         return userMapper.updateUser(user);
 
     }
-    public int deleteUser(String loginName){
-        return userMapper.deleteUser(loginName);
+    public int deleteUser(int id){
+        return userMapper.deleteUser(id);
     }
-
-
-
-//    @Override
-//    public List<User> searchUser(String name,String password){
-//        return userMapper.searchUser(name,password);
-//    }
-//
-//    public User insertUser(User user){
-//        userMapper.insertUser(user);
-//        return user;
-//    }
-//
-//    public List<User> ListUser(){
-//        return userMapper.ListUser();
-//    }
-//
-//    public int updateUser(User user){
-//        return  userMapper.updateUser(user);
-//    }
-//
-//    public int deleteUser(String loginName){
-//        return userMapper.deleteUser(loginName);
-//    }
 
 
 }
