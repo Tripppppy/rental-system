@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class User {
 
-    private int id;
+    private Long id;
     private String loginName;
     private String name;
     private String mobile;
@@ -19,11 +19,11 @@ public class User {
     private LocalDateTime lastModifiedDate;
     private int version;
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

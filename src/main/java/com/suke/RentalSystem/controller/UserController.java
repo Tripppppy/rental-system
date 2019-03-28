@@ -1,6 +1,9 @@
 package com.suke.RentalSystem.controller;
 
-import com.suke.RentalSystem.entity.Result;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.suke.RentalSystem.core.Result;
+import com.suke.RentalSystem.core.ResultGenerator;
 import com.suke.RentalSystem.entity.User;
 import com.suke.RentalSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,43 +13,69 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-    public class UserController {
+public class UserController {
 
-    @Autowired
-    UserService userService;
+  @Autowired
+  UserService userService;
 
-    @GetMapping("/login")
-    public Result login(){
-        String loginName = "666";
-        String password = "123";
-        List<User> list = userService.searchUser(loginName,password);
-        return new Result(true,"success",null);
+  @GetMapping("/login")
+  public Result login(@RequestParam String loginName, @RequestParam String password) {
+    List<User> list = userService.searchUser(loginName, password);
+    if (list.isEmpty()) {
+      return ResultGenerator.genFailResult("登录名或密码错误");
+    } else {
+      return ResultGenerator.genSuccessResult(list.get(0));
     }
+  }
 
 
-    //分页用户：
+  //分页用户：
   @GetMapping("/listUser")
-    public List<User> listUser(int page,int size){
-        return userService.listUser(page,size);
-    }
+  public Result listUser(@RequestParam Integer page, @RequestParam Integer size) {
+    PageHelper.startPage(page, size);
+    List<User> list = userService.listUser();
+    PageInfo pageInfo = new PageInfo(list);
+    return ResultGenerator.genSuccessResult(pageInfo);
+  }
 
-    //添加用户：
-  @GetMapping("/insertUser")
-    public User insertUer(@RequestBody User user){
-        return  userService.insertUser(user);
-    }
+  //单条查询
+  @GetMapping
+  public Result findById(@RequestParam Long id){
+    User user = userService.findById(id);
+    return ResultGenerator.genSuccessResult(user);
+  }
 
-    //删除用户：
+
+  //添加用户：
+  @PostMapping("/insertUser")
+  public Result insertUer(@RequestBody User user) {
+    User user1 = userService.findByLoginNameAndId(user.getLoginName(), user.getId());
+    if (user1 != null) {
+      return ResultGenerator.genFailResult("用户名重复");
+    } else {
+      userService.insertUser(user);
+      return ResultGenerator.genSuccessResult();
+    }
+  }
+
+  //删除用户：
   @GetMapping("/deleteUser")
-    public int deleteUser(int id){
-        return  userService.deleteUser(id);
-    }
+  public Result deleteUser(@RequestParam  Long id) {
+    userService.deleteUser(id);
+    return ResultGenerator.genSuccessResult();
+  }
 
-    //更新用户：
-  @GetMapping("/updateUser")
-    public User updateUser(User user){
-        return  userService.updateUser(user);
+  //更新用户：
+  @PostMapping("/updateUser")
+  public Result updateUser(@RequestBody User user) {
+    User user1 = userService.findByLoginNameAndId(user.getLoginName(), user.getId());
+    if (user1 != null) {
+      return ResultGenerator.genFailResult("用户名重复");
+    } else {
+      userService.updateUser(user);
+      return ResultGenerator.genSuccessResult();
     }
+  }
 
 
 }

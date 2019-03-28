@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suke.RentalSystem.mapper.BallMapper">
+  <resultMap id="Ball" type="com.suke.RentalSystem.entity.Ball">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="status" jdbcType="VARCHAR" property="status"/>
+    <result column="type" jdbcType="VARCHAR" property="type"/>
+    <result column="brand" jdbcType="VARCHAR" property="brand"/>
+    <result column="stock" jdbcType="INT" property="stock"/>
+    <result column="dayprice1" jdbcType="DECIMAL" property="dayprice1"/>
+    <result column="dayprice2" jdbcType="DECIMAL" property="dayprice2"/>
+    <result column="monthprice" jdbcType="DECIMAL" property="monthprice"/>
+
+  </resultMap>
+    <select id="searchBall" resultMap="Ball">
+        SELECT * FROM tbl_ball
+    </select>
+
+    <select id="searchBallById" resultMap="Ball">
+        SELECT * from tbl_user WHERE id=#{id}
+    </select>
+
+    <select id="searchByType" resultMap="Ball">
+      select * from tbl_ball where type=#{type}
+    </select>
+
+    <select id="searchByBrand" resultMap="Ball">
+      select * from tbl_ball where brand=#{brand}
+    </select>
+
+    <select id="insertBall" resultMap="Ball">
+        insert into tbl_ball(id,status,type,brand,stock,dayprice1,dayprice2,monthprice) values
+        (#{id},#{status},#{type},#{brand},#{stock},#{dayprice1},#{dayprice2},#{monthprice})
+    </select>
+
+    <select id="deleteBall" resultMap="Ball">
+        delete * from tbl_ball where id = #{id}
+    </select>
+
+    <select id="updateBall" resultMap="Ball">
+        update tbl_ball set status=#{status},stock=#{stock},dayprice1=#{dayprice1},dayprice2=#{dayprice2},
+        monthprice=#{monthprice} where id = #{id}
+</select>
+
+</mapper>
+

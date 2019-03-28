@@ -25,20 +25,26 @@
         SELECT * from tbl_user
     </select>
 
+    <select id="findById" resultMap="User">
+      select * from tbl_user where id=#{id}
+    </select>
 
     <select id="insertUser" resultMap="User">
         insert into tbl_user(login_name,name,mobile,email,image_url,status,password) values (#{loginName},#{name},#{mobile},#{email},#{imageUrl},#{status},#{password})
     </select>
 
     <select id="deleteUser" resultMap="User">
-        delete * from tbl_user where login_name = #{loginName}
+        delete * from tbl_user where id = #{id}
     </select>
 
     <select id="updateUser" resultMap="User">
         update tbl_user set login_name=#{loginName},name=#{name},mobile=#{mobile},email=#{email},image_url=#{imageUrl},
-        status=#{status},password=#{password},created_by=#{createdBy},created_date=#{createdDate},last_modified_by=#{lastModifiedBy}
-        ,last_modified_date=#{lastModifiedDate},version=#{version} where id = #{id}
+        status=#{status},password=#{password}  where id = #{id}
 </select>
+
+  <select id="findByLoginNameAndId" resultMap="User">
+    select * from tbl_user where login_name = #{loginName} and id != #{id}
+  </select>
 
 </mapper>
 

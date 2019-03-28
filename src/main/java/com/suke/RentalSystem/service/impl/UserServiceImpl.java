@@ -23,16 +23,25 @@ public class UserServiceImpl implements UserService {
         return userMapper.insertUser(user);
 
     }
-    public List<User> listUser(int page,int size){
-        return userMapper.listUser(page,size);
+    public List<User> listUser(){
+        return userMapper.listUser();
     }
     public User updateUser(User user){
         return userMapper.updateUser(user);
 
     }
-    public int deleteUser(int id){
+    public int deleteUser(long id){
         return userMapper.deleteUser(id);
     }
+
+    public User findById(long id){
+      return userMapper.findById(id);
+    }
+
+  @Override
+  public User findByLoginNameAndId(String loginName, Long id) {
+    return userMapper.findByLoginNameAndId(loginName, id);
+  }
 
 
 }
