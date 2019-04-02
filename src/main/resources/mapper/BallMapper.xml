@@ -7,10 +7,10 @@
     <result column="status" jdbcType="VARCHAR" property="status"/>
     <result column="type" jdbcType="VARCHAR" property="type"/>
     <result column="brand" jdbcType="VARCHAR" property="brand"/>
-    <result column="stock" jdbcType="INT" property="stock"/>
-    <result column="dayprice1" jdbcType="DECIMAL" property="dayprice1"/>
-    <result column="dayprice2" jdbcType="DECIMAL" property="dayprice2"/>
-    <result column="monthprice" jdbcType="DECIMAL" property="monthprice"/>
+    <result column="stock" jdbcType="INTEGER" property="stock"/>
+    <result column="dayprice1" jdbcType="DECIMAL" property="dayPrice1"/>
+    <result column="dayprice2" jdbcType="DECIMAL" property="dayPrice1"/>
+    <result column="monthprice" jdbcType="DECIMAL" property="monthPrice"/>
 
   </resultMap>
     <select id="searchBall" resultMap="Ball">
