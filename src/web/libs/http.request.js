@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import baseURL from '_conf/url'
 import { Message } from 'iview'
-import { getToken, clearToken } from '@/libs/util'
+import { clearToken } from '@/libs/util'
 class HttpRequest {
   constructor () {
     this.options = {
@@ -21,13 +21,13 @@ class HttpRequest {
   interceptors (instance, url) {
     // 添加请求拦截器
     instance.interceptors.request.use(config => {
-      const token = getToken()
-      if (!config.url.includes('/users')) {
-        config.headers['x-access-token'] = token
-      }
-      if (token && token !== 'undefined') {
-        config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-      }
+      // const token = getToken()
+      // if (!config.url.includes('/users')) {
+      //   config.headers['x-access-token'] = token
+      // }
+      // if (token && token !== 'undefined') {
+      //   config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+      // }
       config.headers['X-Requested-With'] = 'XMLHttpRequest '
       // Spin.show()
       // 在发送请求之前做些什么

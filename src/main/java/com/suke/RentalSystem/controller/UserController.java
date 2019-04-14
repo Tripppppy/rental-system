@@ -18,9 +18,9 @@ public class UserController {
   @Autowired
   UserService userService;
 
-  @GetMapping("/login")
-  public Result login(@RequestParam String loginName, @RequestParam String password) {
-    List<User> list = userService.searchUser(loginName, password);
+  @PostMapping("/login")
+  public Result login(@RequestBody User user) {
+    List<User> list = userService.searchUser(user.getLoginName(), user.getPassword());
     if (list.isEmpty()) {
       return ResultGenerator.genFailResult("登录名或密码错误");
     } else {

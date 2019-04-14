@@ -5,6 +5,7 @@ import { forEach, hasOneOf, objEqual } from '@/libs/tools'
 const { title, cookieExpires, useI18n } = config
 
 export const TOKEN_KEY = 'token'
+export const USER_INDENTITY_KEY = 'userIdentity'
 
 export const setToken = (token) => {
   Cookies.set(TOKEN_KEY, token, { expires: cookieExpires || 1 })
@@ -15,6 +16,17 @@ export const getToken = () => {
   if (token) return token
   else return false
 }
+
+export const setUserIdentity = (userIdentity) => {
+  Cookies.set(USER_INDENTITY_KEY, userIdentity, { expires: cookieExpires || 1 })
+}
+
+export const getUserIdentity = () => {
+  const userIdentity = Cookies.get(USER_INDENTITY_KEY)
+  if (userIdentity) return JSON.parse(userIdentity)
+  else return false
+}
+
 
 export const hasChild = (item) => {
   return item.children && item.children.length !== 0
@@ -97,16 +109,7 @@ export const clearToken = () => {
   Cookies.remove(TOKEN_KEY)
 }
 
-export const showTitle = (item, vm) => {
-  let { title, __titleIsFunction__ } = item.meta
-  if (!title) return
-  if (useI18n) {
-    if (title.includes('{{') && title.includes('}}') && useI18n) title = title.replace(/({{[\s\S]+?}})/, (m, str) => str.replace(/{{([\s\S]*)}}/, (m, _) => vm.$t(_.trim())))
-    else if (__titleIsFunction__) title = item.meta.title
-    else title = vm.$t(item.name)
-  } else title = (item.meta && item.meta.title) || item.name
-  return title
-}
+export const showTitle = (item, vm) => ((item.meta && item.meta.title) || item.name)
 
 /**
  * @description 本地存储和获取标签导航列表

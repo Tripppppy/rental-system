@@ -15,7 +15,7 @@ import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
 import VOrgTree from 'v-org-tree'
 import 'v-org-tree/dist/v-org-tree.css'
-import http from '@/libs/http.request'
+import http from './libs/http.request'
 // 实际打包时应该不引入mock
 /* eslint-disable */
 if (process.env.NODE_ENV !== 'production') require('@/mock')
@@ -36,8 +36,8 @@ Vue.config.productionTip = false
 /**
  * @description 全局注册应用配置
  */
-Vue.prototype.$config = config
 Vue.prototype.$http = http
+Vue.prototype.$config = config
 /**
  * 注册指令
  */

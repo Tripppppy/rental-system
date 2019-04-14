@@ -5,41 +5,17 @@ export const login = ({ userName, password }) => {
     userName,
     password
   }
-  return axios.request({
-    url: 'login',
-    data,
-    method: 'post'
-  })
+  return http.post('login', data)
 }
 
-export const getUserInfo = (token) => {
-  return axios.request({
-    url: 'get_info',
-    params: {
-      token
-    },
-    method: 'get'
-  })
+export const getUserInfo = () => {
+  return http.get('user/identity')
 }
 
 export const logout = (token) => {
   return axios.request({
     url: 'logout',
     method: 'post'
-  })
-}
-
-export const getUnreadCount = () => {
-  return axios.request({
-    url: 'message/count',
-    method: 'get'
-  })
-}
-
-export const getMessage = () => {
-  return axios.request({
-    url: 'message/init',
-    method: 'get'
   })
 }
 
