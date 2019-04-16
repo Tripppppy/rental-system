@@ -1,21 +1,22 @@
 package com.suke.RentalSystem.service;
 
+import com.suke.RentalSystem.core.Service;
 import com.suke.RentalSystem.entity.Code;
 
 import java.util.List;
 
-public interface CodeService {
-    void saveCode(Code code);
+/**
+ * Created by CodeGenerator on 2018/06/21.
+ */
+public interface CodeService extends Service<Code> {
 
-    void deleteByPK(Long id);
+    List<Code> listCodeByCond(String keyword, String codeGroupCode);
 
-    void updateCode(Code code);
-
-    Object findById(Long id);
-
-    List<Code> listCodeByCond(String s, String type);
-
-    List<Code> findAll();
+    List<Code> listByType(String type);
 
     String getCodeDesc(String type, String code);
+
+    void saveCode(Code code);
+
+    void updateCode(Code code);
 }

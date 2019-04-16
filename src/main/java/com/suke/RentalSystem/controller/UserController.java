@@ -39,8 +39,8 @@ public class UserController {
   }
 
   //单条查询
-  @GetMapping
-  public Result findById(@RequestParam Long id){
+  @GetMapping("/{id}")
+  public Result findById(@PathVariable Long id){
     User user = userService.findById(id);
     return ResultGenerator.genSuccessResult(user);
   }
@@ -59,8 +59,8 @@ public class UserController {
   }
 
   //删除用户：
-  @GetMapping("/deleteUser")
-  public Result deleteUser(@RequestParam  Long id) {
+  @GetMapping("/deleteUser/{id}")
+  public Result deleteUser(@PathVariable  Long id) {
     userService.deleteUser(id);
     return ResultGenerator.genSuccessResult();
   }
@@ -76,6 +76,5 @@ public class UserController {
       return ResultGenerator.genSuccessResult();
     }
   }
-
 
 }

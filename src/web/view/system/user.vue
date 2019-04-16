@@ -67,32 +67,25 @@
         <FormItem label='电子邮箱:' prop='email'>
           <Input v-model='userForm.email' :maxlength=50 placeholder='请输入电子邮箱' style="width: 350px"/>
         </FormItem>
-        <FormItem label="用户角色:" prop='roleIds'>
-          <Select v-model="userForm.roleIds" filterable multiple style="width: 350px">
-            <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="用户类型:" prop='user_type'>
-          <code-select @emitedCodes="getUserTypeList($event)" :codeType="userType">
-            <Select v-model="userForm.type" filterable style="width: 350px">
-              <Option v-for="item in userTypeList" :value="item.code" :key="item.id">{{ item.name }}</Option>
-            </Select>
-          </code-select>
-        </FormItem>
-        <FormItem label="头像:" prop='imageUrl' style="margin-top: 25px">
-          <div>
-            <div class="margin-top-10  margin-top-10Again" v-show="fileChoose">
-              <img :src="userForm.imageUrl" class="imgShow"/>
-            </div>
-            <div>
-              <div class="fileInput">
-                <input type="file" accept="image/png, image/jpeg, image/gif, image/jpg"
-                       @change="handleChange" id="fileinput"/>
-                <span>选择图片</span>
-              </div>
-            </div>
-          </div>
-        </FormItem>
+        <!--<FormItem label="用户角色:" prop='roleIds'>-->
+          <!--<Select v-model="userForm.roleIds" filterable multiple style="width: 350px">-->
+            <!--<Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.name }}</Option>-->
+          <!--</Select>-->
+        <!--</FormItem>-->
+        <!--<FormItem label="头像:" prop='imageUrl' style="margin-top: 25px">-->
+          <!--<div>-->
+            <!--<div class="margin-top-10  margin-top-10Again" v-show="fileChoose">-->
+              <!--<img :src="userForm.imageUrl" class="imgShow"/>-->
+            <!--</div>-->
+            <!--<div>-->
+              <!--<div class="fileInput">-->
+                <!--<input type="file" accept="image/png, image/jpeg, image/gif, image/jpg"-->
+                       <!--@change="handleChange" id="fileinput"/>-->
+                <!--<span>选择图片</span>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</FormItem>-->
       </Form>
       <div slot="footer">
         <Button @click="handleReset()" style="margin-left: 8px">取消</Button>
@@ -114,28 +107,27 @@
       </div>
     </Modal>
 
-    <Modal v-model="showCropedImage">
-      <div class="cropperAgain">
-        <vueCropper
-            ref="cropper"
-            :img="cut.Img"
-            :outputSize="cut.size"
-            :outputType="cut.outputType"
-            :autoCrop="cut.autoCrop"
-            :autoCropWidth="cut.autoCropWidth"
-            :autoCropHeight="cut.autoCropHeight"
-        >
-        </vueCropper>
-      </div>
-      <div slot="footer">
-        <Button @click="cancelReset()" style="margin-left: 8px">取消</Button>
-        <Button type="primary" icon="crop" @click="handleCrop" class="pictureButton">裁剪</Button>
-      </div>
-    </Modal>
+    <!--<Modal v-model="showCropedImage">-->
+      <!--<div class="cropperAgain">-->
+        <!--<vueCropper-->
+            <!--ref="cropper"-->
+            <!--:img="cut.Img"-->
+            <!--:outputSize="cut.size"-->
+            <!--:outputType="cut.outputType"-->
+            <!--:autoCrop="cut.autoCrop"-->
+            <!--:autoCropWidth="cut.autoCropWidth"-->
+            <!--:autoCropHeight="cut.autoCropHeight"-->
+        <!--&gt;-->
+        <!--</vueCropper>-->
+      <!--</div>-->
+      <!--<div slot="footer">-->
+        <!--<Button @click="cancelReset()" style="margin-left: 8px">取消</Button>-->
+        <!--<Button type="primary" icon="crop" @click="handleCrop" class="pictureButton">裁剪</Button>-->
+      <!--</div>-->
+    <!--</Modal>-->
   </div>
 </template>
 <script>
-  import constants from '@/view/shared/constants.js';
   import CodeSelect from '@/view/shared/code/CodeSelect.vue';
   import CodeName from '@/view/shared/code/CodeName.vue';
   import VueCropper from 'vue-cropper'
@@ -146,7 +138,6 @@
     name: 'user',
     data() {
       return {
-        userType: constants.codeType.user_type,
         searchModel: undefined,
         userForm: {
           mobile: undefined,
@@ -246,22 +237,37 @@
             align: 'center'
           },
           {
-            title: '用户类型',
-            align: 'center',
-            key: 'type',
-            render: (h, params) => {
-              const code = params.row.type;
-              const codeType = constants.codeType.user_type;
-              return (<CodeName code={code} codeType={codeType}/>)
-
-            }
-          },
-          {
             title: '操作',
             align: 'center',
             key: 'handle',
             render: (h, params) => {
-              return this.$render.renderEditDel(this, h, params);
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.edit(params.index)
+                    }
+                  }
+                }, '编辑'),
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index)
+                    }
+                  }
+                }, '删除')
+              ]);
             }
           }],
         data: []
@@ -340,7 +346,7 @@
         this.seen = false;
         this.$refs.userForm.resetFields();
         this.editModal = true;
-        this.$http.get('/user/withRoles/' + self.data[index].id, {}).then((res) => {
+        this.$http.get('/user/' + self.data[index].id, {}).then((res) => {
           if (res.code === 200) {
             self.userForm = res.data;
             if (self.userForm.imageUrl) {
@@ -359,7 +365,7 @@
         this.$refs.userForm.validate((valid) => {
           if (valid) {
             if (this.userForm.id) {
-              this.$http.put('/user/updateAdmin', self.userForm).then((res) => {
+              this.$http.post('/user/updateUser', self.userForm).then((res) => {
                 if (res.code === 200) {
                   self.isSaving = false;
                   self.editModal = false;
@@ -370,7 +376,7 @@
                 }
               })
             } else {
-              this.$http.post('/user', self.userForm).then((res) => {
+              this.$http.post('/user/insertUser', self.userForm).then((res) => {
                 if (res.code === 200) {
                   self.isSaving = false;
                   self.editModal = false;
@@ -443,7 +449,7 @@
       deleteItem() {
         this.isDeleting = true;
         const self = this;
-        this.$http.delete('/user/deleteUser/' + self.data[self.deleteIndex].id, {}).then((res) => {
+        this.$http.get('/user/deleteUser/' + self.data[self.deleteIndex].id, {}).then((res) => {
           if (res.code === 200) {
             self.isDeleting = false;
             self.deleteModal = false;

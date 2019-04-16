@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateUser(user);
 
     }
-    public int deleteUser(long id){
-        return userMapper.deleteUser(id);
+    public void deleteUser(long id){
+        userMapper.deleteUser(id);
     }
 
     public User findById(long id){

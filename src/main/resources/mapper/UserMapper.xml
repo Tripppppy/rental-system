@@ -34,7 +34,7 @@
     </select>
 
     <select id="deleteUser" resultMap="User">
-        delete * from tbl_user where id = #{id}
+        delete from tbl_user where id = #{id}
     </select>
 
     <select id="updateUser" resultMap="User">

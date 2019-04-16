@@ -1,51 +1,94 @@
 package com.suke.RentalSystem.service.impl;
 
+import com.suke.RentalSystem.core.AbstractService;
 import com.suke.RentalSystem.entity.Code;
 import com.suke.RentalSystem.mapper.CodeMapper;
 import com.suke.RentalSystem.service.CodeService;
+import com.suke.RentalSystem.util.QueryUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
+
+/**
+ * Created by CodeGenerator on 2018/06/21.
+ */
 @Service
-public class CodeServiceImpl implements CodeService {
-
+@Transactional
+public class CodeServiceImpl extends AbstractService<Code> implements CodeService {
     @Resource
     private CodeMapper codeMapper;
 
+
     @Override
-    public void saveCode(Code code) {
-        codeMapper.saveCode(code);
+    public List<Code> listByType(String type) {
+        if (StringUtils.isEmpty(type)) {
+            return null;
+        }
+        HashMap<String, LinkedHashMap<String, Code>> codeMap = getAllCodes();
+        if(codeMap.get(type) == null) {
+            return null;
+        }
+        return new ArrayList<Code>(codeMap.get(type).values());
     }
 
     @Override
-    public void deleteByPK(Long id) {
-        codeMapper.deleteByPK(id);
-    }
-
-    @Override
-    public void updateCode(Code code) {
-        codeMapper.updateCode(code);
-    }
-
-    @Override
-    public Object findById(Long id) {
-        return codeMapper.findById(id);
-    }
-
-    @Override
-    public List<Code> listCodeByCond(String s, String type) {
-        return codeMapper.listCodeByCond(s, type);
-    }
-
-    @Override
-    public List<Code> findAll() {
-        return codeMapper.findAll();
+    public List<Code> listCodeByCond(String keyword, String codeGroupCode) {
+        if (keyword != null) {
+            keyword = QueryUtil.replaceSpecialCharactorsForLikeParam(keyword);
+        }
+        return codeMapper.listCodeByCond(keyword,codeGroupCode);
     }
 
     @Override
     public String getCodeDesc(String type, String code) {
-        return codeMapper.getCodeDesc(type, code);
+        if (StringUtils.isEmpty(type) || StringUtils.isEmpty(code))
+            return null;
+        HashMap<String, LinkedHashMap<String, Code>> codeMap = getAllCodes();
+        if(codeMap.get(type) == null) {
+            return null;
+        }
+        Code codeObject = codeMap.get(type).get(code);
+        if(codeObject==null)
+            return null;
+        return codeObject.getName();
     }
+
+    @Override
+    public void saveCode(Code code) {
+        super.save(code);
+    }
+
+    @Override
+    public void updateCode(Code code) {
+        super.updateByPK(code);
+    }
+
+    public HashMap<String, LinkedHashMap<String, Code>> getAllCodes() {
+        List<Code> codes = findAll();
+        codes = codes.stream().sorted(Comparator.comparing(Code::getSeqNum)).collect(Collectors.toList());
+
+        HashMap<String, LinkedHashMap<String, Code>> codeMap = new HashMap<>();
+        LinkedHashMap<String, Code> codeSubMap = new LinkedHashMap<>();
+        for (Code code : codes) {
+            if (codeMap.containsKey(code.getCodeGroupCode())) {
+                continue;
+            } else {
+                codeSubMap = new LinkedHashMap<>();
+                codeMap.put(code.getCodeGroupCode(), codeSubMap);
+            }
+
+            for (Code codei : codes) {
+                if (code.getCodeGroupCode().equals(codei.getCodeGroupCode())) {
+                    codeSubMap.put(codei.getCode(), codei);
+                }
+            }
+        }
+        return codeMap;
+    }
+
 }
