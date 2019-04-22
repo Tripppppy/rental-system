@@ -1,0 +1,54 @@
+{
+  "module": "order",
+  "name": "order",
+  "fields":[
+    {
+      "name": "ball_id",
+      "label": "球类",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "user_id",
+      "label": "租球人",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "order_rent_date",
+      "label": "租球日期",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "order_return_date",
+      "label": "还球日期",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "cost",
+      "label": "实际花费",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "status",
+      "label": "订单状态",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    }
+  ]
+}

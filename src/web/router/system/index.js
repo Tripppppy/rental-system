@@ -8,6 +8,9 @@ import userRouter from './userRouter'
 export default {
 	path: '/system',
 	name: '系统管理',
+  meta: {
+    icon: 'ios-stats',
+  },
 	component: Main,
 	children: [
 		roleRouter,

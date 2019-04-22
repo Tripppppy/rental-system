@@ -6,7 +6,6 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="brand" jdbcType="VARCHAR" property="brand" />
     <result column="stock" jdbcType="INTEGER" property="stock" />

@@ -15,16 +15,16 @@ public class ClientCodeGenerator {
     private static final String AUTHOR = "ClientCodeGenerator";//@author
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());//@date
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
-    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/job/resources/generator/template/";//模板位置
-    private static final String CONFIG_FILE_PATH = PROJECT_PATH + "/src/job/resources/config/";//模板位置
+    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/test/resources/generator/template/";//模板位置
+    private static final String CONFIG_FILE_PATH = PROJECT_PATH + "/src/test/resources/config/";//模板位置
 
-    private static final String WEB_APP_PATH = PROJECT_PATH + "/src/webapp/";//模板位置
+    private static final String WEB_APP_PATH = PROJECT_PATH + "/src/web/";//模板位置
 
     public static void main(String[] args){
         System.out.println(PROJECT_PATH);
         System.out.println(TEMPLATE_FILE_PATH);
 
-        JSONObject jsonData = parseJson("job.json");
+        JSONObject jsonData = parseJson("order.json");
         System.out.println(jsonData.get("fields"));
         generateVue(jsonData);
     }
@@ -43,7 +43,7 @@ public class ClientCodeGenerator {
             data.put("editFormData", jsonMap.get("editFormDataBuilder"));
             data.put("editFormDataRule", jsonMap.get("editFormDataRuleBuilder"));
 
-            File file = new File(WEB_APP_PATH +"views/"+
+            File file = new File(WEB_APP_PATH +"view/"+
                     jsonData.get("module") + "/" +
                     jsonData.get("name") + ".vue");
             if (!file.getParentFile().exists()) {

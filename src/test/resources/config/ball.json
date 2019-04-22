@@ -1,0 +1,54 @@
+{
+  "module": "ball",
+  "name": "ball",
+  "fields":[
+    {
+      "name": "type",
+      "label": "类型",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "brand",
+      "label": "品牌",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "stock",
+      "label": "库存",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "dayPrice1",
+      "label": "日租价格",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "dayPrice2",
+      "label": "日租超出价格",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    },
+    {
+      "name": "monthPrice",
+      "label": "月租价格",
+      "type": "text",
+      "rules": [
+        "required"
+      ]
+    }
+  ]
+}

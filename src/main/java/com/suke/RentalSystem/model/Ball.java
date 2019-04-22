@@ -15,11 +15,6 @@ public class Ball {
     private Long id;
 
     /**
-     * 租赁状态
-     */
-    private String status;
-
-    /**
      * 类型
      */
     private String type;
@@ -82,24 +77,6 @@ public class Ball {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * 获取租赁状态
-     *
-     * @return status - 租赁状态
-     */
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * 设置租赁状态
-     *
-     * @param status 租赁状态
-     */
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     /**
