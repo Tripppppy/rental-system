@@ -1,7 +1,5 @@
 import Main from '@/components/main'
 import roleRouter from './roleRouter'
-import codeRouter from './codeRouter'
-import codegroupRouter from './codegroupRouter'
 import userRouter from './userRouter'
 // *** insert import here *** // // don't change this line
 
@@ -14,9 +12,37 @@ export default {
 	component: Main,
 	children: [
 		roleRouter,
-		codeRouter,
-		codegroupRouter,
 		userRouter,
+    {
+      path: 'codeGroup',
+			name: 'code_group',
+      meta: {
+        icon: 'ios-stats',
+        title: '编码组',
+        hideInMenu: false
+      },
+      component: () => import(/* webpackChunkName: 'system' */ '@/view/system/codeGroup.vue')
+    },
+    {
+      path: 'codeGroup/add',
+			name: 'code_group_add',
+      meta: {
+        title: '添加编码组',
+        hideInMenu: true
+      },
+      notMenu: true,
+      component: () => import(/* webpackChunkName: "config" */ '@/view/system/edit-codeGroup.vue')
+    },
+    {
+      path: 'codeGroup/edit/:codeGroupId',
+      meta: {
+        title: '编辑编码组',
+        hideInMenu: true
+      },
+			name: 'code_group_edit',
+      notMenu: true,
+      component: () => import(/* webpackChunkName: "config" */ '@/view/system/edit-codeGroup.vue')
+    },
 		// *** insert router here *** // // don't change this line
 	]
 }
