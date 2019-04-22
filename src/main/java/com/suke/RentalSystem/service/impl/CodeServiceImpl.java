@@ -1,8 +1,8 @@
 package com.suke.RentalSystem.service.impl;
 
 import com.suke.RentalSystem.core.AbstractService;
-import com.suke.RentalSystem.entity.Code;
-import com.suke.RentalSystem.mapper.CodeMapper;
+import com.suke.RentalSystem.model.Code;
+import com.suke.RentalSystem.dao.CodeMapper;
 import com.suke.RentalSystem.service.CodeService;
 import com.suke.RentalSystem.util.QueryUtil;
 import org.springframework.stereotype.Service;

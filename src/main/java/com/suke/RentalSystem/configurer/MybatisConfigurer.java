@@ -58,7 +58,7 @@ public class MybatisConfigurer {
   public MapperScannerConfigurer mapperScannerConfigurer() {
     MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
     mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
-    mapperScannerConfigurer.setBasePackage("com.suke.RentalSystem.mapper");
+    mapperScannerConfigurer.setBasePackage("com.suke.RentalSystem.dao");
     return mapperScannerConfigurer;
   }
 

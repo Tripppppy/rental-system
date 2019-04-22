@@ -85,7 +85,7 @@ public abstract class AbstractService<T> implements Service<T> {
                 Integer currentVersion = (Integer) Reflections.invokeGetter(currentEntity, field_name_version);
 
                 if (currentEntity == null || (currentVersion != null && !version.equals(currentVersion))) {
-                    throw new RuntimeException(String.format("concurrent update for entity: {0}", model));
+                    throw new RuntimeException(String.format("concurrent update for model: {0}", model));
                 }
 
                 Reflections.invokeSetter(model, field_name_version, version + 1);
@@ -130,7 +130,7 @@ public abstract class AbstractService<T> implements Service<T> {
     }
 
 //    public void deleteByIds(String ids) {
-//        mapper.deleteByIds(ids);
+//        dao.deleteByIds(ids);
 //    }
 
     public int updateByPK(T model) {
@@ -172,14 +172,14 @@ public abstract class AbstractService<T> implements Service<T> {
 //            Field field = modelClass.getDeclaredField(fieldName);
 //            field.setAccessible(true);
 //            field.set(model, value);
-//            return mapper.selectOne(model);
+//            return dao.selectOne(model);
 //        } catch (ReflectiveOperationException e) {
 //            throw new ServiceException(e.getMessage(), e);
 //        }
 //    }
 
 //    public List<T> findByIds(String ids) {
-//        return mapper.selectByIds(ids);
+//        return dao.selectByIds(ids);
 //    }
 
     public List<T> findByCondition(Condition condition) {

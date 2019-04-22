@@ -1,4 +1,4 @@
-package com.suke.RentalSystem.controller;
+package com.suke.RentalSystem.web;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

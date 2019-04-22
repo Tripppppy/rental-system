@@ -1,10 +1,10 @@
-package com.suke.RentalSystem.controller;
+package com.suke.RentalSystem.web;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.suke.RentalSystem.core.Result;
 import com.suke.RentalSystem.core.ResultGenerator;
-import com.suke.RentalSystem.entity.User;
+import com.suke.RentalSystem.model.User;
 import com.suke.RentalSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

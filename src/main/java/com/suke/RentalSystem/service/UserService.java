@@ -1,6 +1,6 @@
 package com.suke.RentalSystem.service;
 
-import com.suke.RentalSystem.entity.User;
+import com.suke.RentalSystem.model.User;
 
 import java.util.List;
 

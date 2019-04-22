@@ -2,7 +2,7 @@ package com.suke.RentalSystem.service;
 
 
 import com.suke.RentalSystem.core.Service;
-import com.suke.RentalSystem.entity.CodeGroup;
+import com.suke.RentalSystem.model.CodeGroup;
 
 import java.util.List;
 

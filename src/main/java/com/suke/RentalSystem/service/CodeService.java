@@ -1,7 +1,7 @@
 package com.suke.RentalSystem.service;
 
 import com.suke.RentalSystem.core.Service;
-import com.suke.RentalSystem.entity.Code;
+import com.suke.RentalSystem.model.Code;
 
 import java.util.List;
 

@@ -8,5 +8,5 @@ spring:
     freemarker:
       checkTemplateLocation: false
       mybatis:
-        typeAliasesPackage: com.suke.RentalSystem.entity
-        mapperLocations: classpath:mapper/*.xml
+        typeAliasesPackage: com.suke.RentalSystem.model
+        mapperLocations: classpath:dao/*.xml

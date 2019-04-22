@@ -1,60 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="com.suke.RentalSystem.mapper.OrderMapper">
-  <resultMap id="Order" type="com.suke.RentalSystem.entity.Order">
-    <id column="id" jdbcType="BIGINT" property="id"/>
-    <id column="ball_id" jdbcType="BIGINT" property="ballId"/>
-    <id column="user_id" jdbcType="BIGINT" property="userId"/>
-    <result column="order_rent_date" jdbcType="TIMESTAMP" property="orderRentDate"/>
-    <result column="order_return_date" jdbcType="TIMESTAMP" property="orderRetuenDate"/>
-    <result column="cost" jdbcType="DECIMAL" property="cost"/>
-    <result column="status" jdbcType="VARCHAR" property="status"/>
-
+<mapper namespace="com.suke.RentalSystem.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.suke.RentalSystem.model.Order">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ball_id" jdbcType="BIGINT" property="ballId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="order_rent_date" jdbcType="TIMESTAMP" property="orderRentDate" />
+    <result column="order_return_date" jdbcType="TIMESTAMP" property="orderReturnDate" />
+    <result column="cost" jdbcType="DOUBLE" property="cost" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="created_by" jdbcType="BIGINT" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy" />
+    <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
-    <select id="orderList" resultMap="Order">
-        SELECT * FROM tbl_order
-    </select>
-
-    <select id="order" resultMap="Order">
-        SELECT * from tbl_order WHERE id=#{id}
-    </select>
-
-    <select id="showUser" resultMap="Order">
-      select * from tbl_order where user_id=#{userId}
-    </select>
-
-    <select id="showBall" resultMap="Order">
-      select * from tbl_order where ball_id=#{ballId}
-    </select>
-
-    <select id="orderRentDate" resultMap="Order">
-      select order_rent_date from tbl_order where id=#{id}
-    </select>
-
-  <select id="orderReturnDate" resultMap="Order">
-      select order_return_date from tbl_order where id=#{id}
-    </select>
-
-  <select id="cost" resultMap="Order">
-      select cost from tbl_order where id=#{id}
-    </select>
-
-  <select id="status" resultMap="Order">
-      select status from tbl_order where id=#{id}
-    </select>
-
-  <select id="insertOrder" resultMap="Order">
-        insert into tbl_order(id,ball_id,user_id,order_rent_date,order_return_date,cost,status) values (#{id},#{ballId},#{userId},#{orderRentDate},#{orderReturnDate},#{cost},#{status})
-    </select>
-
-  <select id="deleteOrder" resultMap="Order">
-        delete * from tbl_order where id = #{id}
-    </select>
-
-    <select id="updateOrder" resultMap="Order">
-        update tbl_order set order_rent_date=#{orderRentDate},order_return_date=#{orderReturnDate},cost=#{cost},status=#{status} where id = #{id}
-</select>
-
 </mapper>
-

@@ -1,6 +1,6 @@
-package com.suke.RentalSystem.mapper;
+package com.suke.RentalSystem.dao;
 
-import com.suke.RentalSystem.entity.User;
+import com.suke.RentalSystem.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

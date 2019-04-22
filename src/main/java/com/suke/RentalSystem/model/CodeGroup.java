@@ -1,10 +1,10 @@
-package com.suke.RentalSystem.entity;
+package com.suke.RentalSystem.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Table(name = "tbl_code")
-public class Code {
+@Table(name = "tbl_code_group")
+public class CodeGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,13 +27,7 @@ public class Code {
 
     private String name;
 
-    @Column(name = "seq_num")
-    private Integer seqNum;
-
     private String description;
-
-    @Column(name = "code_group_code")
-    private String codeGroupCode;
 
     /**
      * @return id
@@ -148,20 +142,6 @@ public class Code {
     }
 
     /**
-     * @return seq_num
-     */
-    public Integer getSeqNum() {
-        return seqNum;
-    }
-
-    /**
-     * @param seqNum
-     */
-    public void setSeqNum(Integer seqNum) {
-        this.seqNum = seqNum;
-    }
-
-    /**
      * @return description
      */
     public String getDescription() {
@@ -173,19 +153,5 @@ public class Code {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return code_group_code
-     */
-    public String getCodeGroupCode() {
-        return codeGroupCode;
-    }
-
-    /**
-     * @param codeGroupCode
-     */
-    public void setCodeGroupCode(String codeGroupCode) {
-        this.codeGroupCode = codeGroupCode;
     }
 }

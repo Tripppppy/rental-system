@@ -1,4 +1,4 @@
-package com.suke.RentalSystem.entity;
+package com.suke.RentalSystem.model;
 
 public class Result {
     private boolean success;

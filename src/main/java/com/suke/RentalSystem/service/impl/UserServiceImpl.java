@@ -1,9 +1,8 @@
 package com.suke.RentalSystem.service.impl;
 
-import com.suke.RentalSystem.entity.User;
-import com.suke.RentalSystem.mapper.UserMapper;
+import com.suke.RentalSystem.model.User;
+import com.suke.RentalSystem.dao.UserMapper;
 import com.suke.RentalSystem.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
