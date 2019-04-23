@@ -68,6 +68,13 @@ public class CodeServiceImpl extends AbstractService<Code> implements CodeServic
         super.updateByPK(code);
     }
 
+    @Override
+    public Code findByCode(String code) {
+        Code code1 = new Code();
+        code1.setCode(code);
+        return findOne(code1);
+    }
+
     public HashMap<String, LinkedHashMap<String, Code>> getAllCodes() {
         List<Code> codes = findAll();
         codes = codes.stream().sorted(Comparator.comparing(Code::getSeqNum)).collect(Collectors.toList());

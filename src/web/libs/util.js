@@ -406,7 +406,6 @@ export const setTitle = (routeItem, vm) => {
 }
 
 // 选择图片
-
 export const cropperPicture = (event) => {
   let file = event.target.files[0];
   let reader = new FileReader();

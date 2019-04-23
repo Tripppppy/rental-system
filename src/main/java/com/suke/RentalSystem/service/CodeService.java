@@ -19,4 +19,6 @@ public interface CodeService extends Service<Code> {
     void saveCode(Code code);
 
     void updateCode(Code code);
+
+    Code findByCode(String brand);
 }

@@ -17,5 +17,6 @@
     <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy" />
     <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate" />
     <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
   </resultMap>
 </mapper>

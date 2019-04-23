@@ -61,6 +61,15 @@ public class Ball {
 
     private Integer version;
 
+    @Transient
+    private String brandName;
+
+    @Transient
+    private String typeName;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
     /**
      * 获取主键
      *
@@ -255,5 +264,29 @@ public class Ball {
      */
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

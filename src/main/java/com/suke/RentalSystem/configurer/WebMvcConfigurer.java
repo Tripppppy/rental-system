@@ -1,5 +1,8 @@
 package com.suke.RentalSystem.configurer;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +25,13 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        converters.add(stringHttpMessageConverter);
-        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-        mappingJackson2HttpMessageConverter.setPrettyPrint(true);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        converters.add(mappingJackson2HttpMessageConverter);
+        FastJsonHttpMessageConverter4 converter = new FastJsonHttpMessageConverter4();
+        FastJsonConfig config = new FastJsonConfig();
+        config.setSerializerFeatures(SerializerFeature.WriteMapNullValue,//保留空的字段
+                SerializerFeature.WriteNullStringAsEmpty,//String null -> ""
+                SerializerFeature.WriteNullNumberAsZero);//Number null -> 0
+        converter.setFastJsonConfig(config);
+        converter.setDefaultCharset(Charset.forName("UTF-8"));
+        converters.add(converter);
     }
 }

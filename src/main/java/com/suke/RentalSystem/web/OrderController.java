@@ -3,9 +3,11 @@ package com.suke.RentalSystem.web;
 import com.suke.RentalSystem.core.Result;
 import com.suke.RentalSystem.core.ResultGenerator;
 import com.suke.RentalSystem.model.Order;
+import com.suke.RentalSystem.service.BallService;
 import com.suke.RentalSystem.service.OrderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.suke.RentalSystem.service.UserService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,6 +22,10 @@ import java.util.List;
 public class OrderController {
     @Resource
     private OrderService orderService;
+    @Resource
+    private UserService userService;
+    @Resource
+    private BallService ballService;
 
     @PostMapping
     public Result add(@Validated @RequestBody Order order) {
@@ -49,6 +55,10 @@ public class OrderController {
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<Order> list = orderService.findAll();
+        list.forEach(item -> {
+            item.setUser(userService.findById(item.getUserId()));
+            item.setBall(ballService.findById(item.getBallId()));
+        });
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

@@ -73,6 +73,20 @@
                     <Input v-model='ballForm.dayPrice2' number placeholder='请输入日租超出价格'/></FormItem>
                 <FormItem label='月租价格' prop='monthPrice' style="width: 270px">
                     <Input v-model='ballForm.monthPrice' number placeholder='请输入月租价格'/></FormItem>
+                <FormItem label="图片:" prop='imageUrl' style="margin-top: 25px">
+                    <div>
+                        <div class="margin-top-10 margin-top-10Again" v-show="fileChoose">
+                            <img :src="ballForm.imageUrl" class="imgShow"/>
+                        </div>
+                        <div>
+                            <div class="fileInput">
+                                <input type="file" accept="image/png, image/jpeg, image/gif, image/jpg"
+                                       @change="handleChange" id="fileinput"/>
+                                <span>选择图片</span>
+                            </div>
+                        </div>
+                    </div>
+                </FormItem>
             </Form>
             <div slot="footer">
                 <Button @click="handleReset()" style="margin-left: 8px">取消</Button>
@@ -93,15 +107,36 @@
                 <Button type="error" size="large" long :loading="isDeleting" @click="deleteItem">删除</Button>
             </div>
         </Modal>
+
+        <Modal v-model="showCropedImage">
+            <div class="cropperAgain">
+                <vueCropper
+                        ref="cropper"
+                        :img="cut.Img"
+                        :outputSize="cut.size"
+                        :outputType="cut.outputType"
+                        :autoCrop="cut.autoCrop"
+                        :autoCropWidth="cut.autoCropWidth"
+                        :autoCropHeight="cut.autoCropHeight">
+                </vueCropper>
+            </div>
+            <div slot="footer">
+                <Button @click="cancelReset()" style="margin-left: 8px">取消</Button>
+                <Button type="primary" icon="crop" @click="handleCrop" class="pictureButton">裁剪</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
+  import { VueCropper }  from 'vue-cropper'
     import constants from '../shared/constants'
     import CodeSelect from '../shared/code/CodeSelect'
+    import { cropperPicture } from '../../libs/util';
   export default {
     name: 'ball',
     components: {
-      CodeSelect
+      CodeSelect,
+      VueCropper
     },
     data() {
       return {
@@ -113,6 +148,7 @@
           dayPrice1: undefined,
           dayPrice2: undefined,
           monthPrice: undefined,
+          imageUrl: undefined
         },
         ballFormRule: {
           type: { required: true, type: 'string', message: '类型不能为空', trigger: 'change' },
@@ -121,6 +157,10 @@
           dayPrice1: [{required: true,type: 'number', message: '日租价格不能为空且必须为数字.', trigger: 'blur'},],
           dayPrice2: [{required: true,type: 'number', message: '日租超出不能为空且必须为数字.', trigger: 'blur'},],
           monthPrice: [{required: true,type: 'number', message: '月租不能为空且必须为数字.', trigger: 'blur'},],
+          imageUrl: [
+            { required: true, message: 'ImageUrl不能为空.', trigger: 'blur' },
+            { type: 'string', max: 256, message: 'ImageUrl最多256字符', trigger: 'blur' },
+          ],
         },
         loading: false,
         keepalive: false,
@@ -139,28 +179,24 @@
           },
           {
             title: '类型',
-            key: 'type',
-            render: (h ,params) => {
-              let result = '';
-              this.ballTypeList.map(item => {
-                if (item.code === params.row.type) {
-                  result = item.name;
-                }
-              });
-              return h('span', result)
-            }
+            key: 'typeName',
           },
           {
             title: '品牌',
-            key: 'brand',
-            render: (h ,params) => {
-              let result = '';
-              this.ballBrandList.map(item => {
-                if (item.code === params.row.brand) {
-                  result = item.name;
+            key: 'brandName',
+          },
+          {
+            title: '图片', key: 'imageUrl',
+            render: (h, params) => {
+              return h('img', {
+                domProps: {
+                  align: 'center',
+                  src: params.row.imageUrl,
+                },
+                style: {
+                  width: '45px',
                 }
-              });
-              return h('span', result)
+              })
             }
           },
           {
@@ -222,7 +258,17 @@
         ballTypeList: [],
         ballBrandList: [],
         ballType: constants.codeType.ball_type,
-        ballBrand: constants.codeType.ball_brand
+        ballBrand: constants.codeType.ball_brand,
+        fileChoose: false,
+        showCropedImage: false,
+        cut: {
+          size: 1,
+          Img: '',
+          outputType: 'jpeg || png || web',
+          autoCrop: true,
+          autoCropWidth: 200,
+          autoCropHeight: 200
+        },
       }
     },
     methods: {
@@ -270,7 +316,9 @@
           dayPrice1: undefined,
           dayPrice2: undefined,
           monthPrice: undefined,
+          imageUrl: undefined
         };
+        this.$refs.ballForm.resetFields();
         this.editModal = true;
       },
 
@@ -282,11 +330,19 @@
         this.$http.get('/ball/' + self.data[index].id, {}).then((res) => {
           if (res.code === 200) {
             self.ballForm = res.data;
+            if (self.ballForm.imageUrl) {
+              self.fileChoose = true;
+            }
           } else {
             self.$Message.error('获取ball失败！' + res.code);
           }
 
         });
+      },
+      clear() {
+        if (document.getElementById('fileinput').value !== '') {
+          document.getElementById('fileinput').value = '';
+        }
       },
 
       handleSubmit() {
@@ -351,6 +407,36 @@
       },
       getBallBrandList(data) {
         this.ballBrandList = data.data;
+      },
+      handleChange(e) {
+        this.showCropedImage = true;
+        let reader = cropperPicture(e);
+        reader.onload = (event) => {
+          let data = event.target.result;
+          reader.onload = null;
+          this.cut.Img = data;
+          this.clear();
+        };
+      },
+      handleCrop() {
+        this.showCropedImage = false;
+        let self = this;
+        // 获取截图的blob数据
+        this.$refs.cropper.getCropBlob((data) => {
+          var fd = new FormData();
+          fd.append('picturefile', data, 'cropped.png');
+          const config = {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          };
+          this.$http.post('/common/file/upload', fd, config).then(resp => {
+            if (resp.code === 200) {
+              self.ballForm.imageUrl = resp.data.location;
+              self.fileChoose = true;
+            }
+          }).catch(err => {
+            console.log(err)
+          });
+        })
       },
     },
 

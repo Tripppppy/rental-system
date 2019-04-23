@@ -11,7 +11,7 @@ server:
     context-path: /rental-system
 
 qiniuyun:
-        ak: T5XQB_CwNFrIdhVvTClo66SdRdUhGPIt6K2iFE4Y
-        sk: kJKqehmTegWIXZrR9AkZ2agrV38zZJ1wQypEYwue
-        bucket: hsd-server
-        outline: http://p7fnz7roh.bkt.clouddn.com/
+    ak: T5XQB_CwNFrIdhVvTClo66SdRdUhGPIt6K2iFE4Y
+    sk: kJKqehmTegWIXZrR9AkZ2agrV38zZJ1wQypEYwue
+    bucket: hsd-server
+    outline: http://img.kimen.xyz/

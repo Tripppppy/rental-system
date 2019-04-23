@@ -58,6 +58,12 @@ public class Order {
 
     private Integer version;
 
+    @Transient
+    private User user;
+
+    @Transient
+    private Ball ball;
+
     /**
      * @return id
      */
@@ -248,5 +254,21 @@ public class Order {
      */
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
     }
 }

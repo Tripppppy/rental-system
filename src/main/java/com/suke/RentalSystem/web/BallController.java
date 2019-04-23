@@ -6,6 +6,7 @@ import com.suke.RentalSystem.model.Ball;
 import com.suke.RentalSystem.service.BallService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.suke.RentalSystem.service.CodeService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,6 +21,8 @@ import java.util.List;
 public class BallController {
     @Resource
     private BallService ballService;
+    @Resource
+    private CodeService codeService;
 
     @PostMapping
     public Result add(@Validated @RequestBody Ball ball) {
@@ -49,6 +52,10 @@ public class BallController {
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<Ball> list = ballService.findAll();
+        list.forEach(item -> {
+            item.setBrandName(codeService.findByCode(item.getBrand()).getName());
+            item.setTypeName(codeService.findByCode(item.getType()).getName());
+        });
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
