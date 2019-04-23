@@ -1,24 +1,14 @@
 package com.suke.RentalSystem.dao;
 
+import com.suke.RentalSystem.core.Mapper;
 import com.suke.RentalSystem.model.User;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-@Mapper
-public interface UserMapper {
-    List<User> searchUser(@Param("name") String name, @Param("password") String password);
+public interface UserMapper extends Mapper<User> {
 
-    List<User> listUser();
+    List<User> listUserPage(@Param("keyword") String keyword);
 
-     User insertUser(User user);
-
-     void deleteUser(long id);
-
-     User updateUser(User user);
-
-     User findById(long id);
-
-  User findByLoginNameAndId(@Param("loginName") String loginName, @Param("id") Long id);
+    void updateImageUrl(@Param("userId") Long userId, @Param("imageUrl") String imageUrl);
 }

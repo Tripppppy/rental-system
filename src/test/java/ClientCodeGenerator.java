@@ -24,7 +24,7 @@ public class ClientCodeGenerator {
         System.out.println(PROJECT_PATH);
         System.out.println(TEMPLATE_FILE_PATH);
 
-        JSONObject jsonData = parseJson("order.json");
+        JSONObject jsonData = parseJson("ball.json");
         System.out.println(jsonData.get("fields"));
         generateVue(jsonData);
     }

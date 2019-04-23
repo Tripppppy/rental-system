@@ -1,16 +1,23 @@
 package com.suke.RentalSystem.service;
 
+import com.suke.RentalSystem.core.Service;
 import com.suke.RentalSystem.model.User;
 
 import java.util.List;
 
-public interface   UserService {
-    List<User> searchUser(String loginName,String password);
-    User insertUser(User user);
-    User updateUser(User user);
-    void deleteUser(long id);
-    List<User> listUser();
-    User findById(long id);
+public interface UserService extends Service<User> {
 
-  User findByLoginNameAndId(String loginName, Long id);
+    User findByLoginName(String loginName);
+
+    Long saveUser(User user);
+
+    User getUserIdentity(Long userId);
+
+    int updateAdmin(User user);
+
+    List<User> listUserPage(String keyword);
+
+    void deleteUser(Long userId);
+
+    void updatePassword(User user);
 }

@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.suke.RentalSystem.dao.UserMapper">
-  <resultMap id="User" type="com.suke.RentalSystem.model.User">
+  <resultMap id="BaseResultMap" type="com.suke.RentalSystem.model.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
     <id column="id" jdbcType="BIGINT" property="id"/>
     <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
     <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
@@ -11,40 +13,46 @@
     <result column="image_url" jdbcType="VARCHAR" property="imageUrl"/>
     <result column="status" jdbcType="VARCHAR" property="status"/>
     <result column="password" jdbcType="VARCHAR" property="password"/>
+    <result column="type" jdbcType="VARCHAR" property="type"/>
     <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
     <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
     <result column="last_modified_by" jdbcType="BIGINT" property="lastModifiedBy"/>
     <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate"/>
-    <result column="version" jdbcType="BIGINT" property="version"/>
+    <result column="version" jdbcType="INTEGER" property="version"/>
   </resultMap>
-    <select id="searchUser" resultMap="User">
-        SELECT * FROM tbl_user WHERE login_name=#{name} AND password=#{password}
-    </select>
 
-    <select id="listUser" resultMap="User">
-        SELECT * from tbl_user
-    </select>
+  <resultMap id="correlationResultMap" type="com.suke.RentalSystem.model.User" extends="BaseResultMap">
+    <collection property="roles" ofType="com.suke.RentalSystem.model.Role">
+      <id column="roleId" jdbcType="BIGINT" property="id" />
+      <result column="code" jdbcType="VARCHAR" property="code" />
+      <result column="roleName" jdbcType="VARCHAR" property="name" />
+      <result column="description" jdbcType="VARCHAR" property="description" />
+    </collection>
+  </resultMap>
 
-    <select id="findById" resultMap="User">
-      select * from tbl_user where id=#{id}
-    </select>
+  <resultMap id="PageResultMap" type="com.suke.RentalSystem.model.User" extends="BaseResultMap">
+    <collection property="roles" ofType="com.suke.RentalSystem.model.Role" column="userId=id"
+                select="com.suke.RentalSystem.dao.RoleMapper.findRolesByUserId" >
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="code" jdbcType="VARCHAR" property="code" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+    </collection>
+  </resultMap>
 
-    <select id="insertUser" resultMap="User">
-        insert into tbl_user(login_name,name,mobile,email,image_url,status,password) values (#{loginName},#{name},#{mobile},#{email},#{imageUrl},#{status},#{password})
-    </select>
-
-    <select id="deleteUser" resultMap="User">
-        delete from tbl_user where id = #{id}
-    </select>
-
-    <select id="updateUser" resultMap="User">
-        update tbl_user set login_name=#{loginName},name=#{name},mobile=#{mobile},email=#{email},image_url=#{imageUrl},
-        status=#{status},password=#{password}  where id = #{id}
-</select>
-
-  <select id="findByLoginNameAndId" resultMap="User">
-    select * from tbl_user where login_name = #{loginName} and id != #{id}
+  <select id="listUserPage" resultMap="PageResultMap">
+    SELECT *
+    FROM tbl_user
+    <where>
+      <if test=" keyword != null">
+        AND name like concat('%',#{keyword},'%')
+        OR mobile like concat('%',#{keyword},'%')
+      </if>
+    </where>
   </select>
 
-</mapper>
+  <update id="updateImageUrl">
+      UPDATE tbl_user SET image_url = #{imageUrl}
+      WHERE id = #{userId}
+    </update>
 
+</mapper>

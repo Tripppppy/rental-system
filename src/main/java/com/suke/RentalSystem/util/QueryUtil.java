@@ -2,9 +2,6 @@ package com.suke.RentalSystem.util;
 
 import net.logstash.logback.encoder.org.apache.commons.lang.StringEscapeUtils;
 
-/**
- * Created by zrkj on 2017/12/11.
- */
 public class QueryUtil {
 
     /**

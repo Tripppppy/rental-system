@@ -11,8 +11,6 @@
       <Row>
         <Col span="24">
           <Button class="" type="primary" @click="add">添加</Button>
-          <Input class="pull-right" v-model="searchModel"
-               icon="ios-search" placeholder="搜索..." style="width: 200px" />
         </Col>
       </Row>
     </div>

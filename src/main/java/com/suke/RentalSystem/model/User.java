@@ -1,144 +1,299 @@
 package com.suke.RentalSystem.model;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
-
+@Table(name = "tbl_user")
 public class User {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String loginName;
-    private String name;
+
     private String mobile;
+
+    /**
+     * 默认为员工的工号
+     */
+    @Column(name = "login_name")
+    private String loginName;
+
+    private String name;
+
     private String email;
+
+    @Column(name = "image_url")
     private String imageUrl;
+
     private String status;
+
     private String password;
-    private int createdBy;
+
+    /**
+     * 0: 平台用户，1:公司用户
+     */
+    private String type;
+
+    @Column(name = "created_by")
+    private Long createdBy;
+
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
-    private int lastModifiedBy;
+
+    @Column(name = "last_modified_by")
+    private Long lastModifiedBy;
+
+    @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
-    private int version;
 
-  public Long getId() {
-    return id;
-  }
+    private Integer version;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    @Transient
+    private List<Role> roles;
 
-  public String getLoginName() {
-    return loginName;
-  }
+    @Transient
+    private List<Long> roleIds;
 
-  public void setLoginName(String loginName) {
-    this.loginName = loginName;
-  }
+    public Role getRole() {
+        return role;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    @Transient
+    private Role role;
 
-  public String getMobile() {
-    return mobile;
-  }
+    public UserRole getUserRole() {
+        return userRole;
+    }
 
-  public void setMobile(String mobile) {
-    this.mobile = mobile;
-  }
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    @Transient
+    private UserRole userRole;
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
 
-  public String getImageUrl() {
-    return imageUrl;
-  }
+    /**
+     * @return id
+     */
+    public Long getId() {
+        return id;
+    }
 
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
+    /**
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getStatus() {
-    return status;
-  }
+    /**
+     * @return mobile
+     */
+    public String getMobile() {
+        return mobile;
+    }
 
-  public void setStatus(String status) {
-    this.status = status;
-  }
+    /**
+     * @param mobile
+     */
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    /**
+     * 获取默认为员工的工号
+     *
+     * @return login_name - 默认为员工的工号
+     */
+    public String getLoginName() {
+        return loginName;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    /**
+     * 设置默认为员工的工号
+     *
+     * @param loginName 默认为员工的工号
+     */
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
 
-  public int getCreatedBy() {
-    return createdBy;
-  }
+    /**
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
 
-  public void setCreatedBy(int createdBy) {
-    this.createdBy = createdBy;
-  }
+    /**
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
+    /**
+     * @return email
+     */
+    public String getEmail() {
+        return email;
+    }
 
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
-  }
+    /**
+     * @param email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public int getLastModifiedBy() {
-    return lastModifiedBy;
-  }
+    /**
+     * @return image_url
+     */
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-  public void setLastModifiedBy(int lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
+    /**
+     * @param imageUrl
+     */
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
-  }
+    /**
+     * @return status
+     */
+    public String getStatus() {
+        return status;
+    }
 
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
-  }
+    /**
+     * @param status
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-  public int getVersion() {
-    return version;
-  }
+    /**
+     * @return password
+     */
+    public String getPassword() {
+        return password;
+    }
 
-  public void setVersion(int version) {
-    this.version = version;
-  }
+    /**
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  @Override
-  public String toString() {
-    return "User{" +
-      "id=" + id +
-      ", loginName='" + loginName + '\'' +
-      ", name='" + name + '\'' +
-      ", mobile='" + mobile + '\'' +
-      ", email='" + email + '\'' +
-      ", imageUrl='" + imageUrl + '\'' +
-      ", status='" + status + '\'' +
-      ", password='" + password + '\'' +
-      ", createdBy=" + createdBy +
-      ", createdDate=" + createdDate +
-      ", lastModifiedBy=" + lastModifiedBy +
-      ", lastModifiedDate=" + lastModifiedDate +
-      ", version=" + version +
-      '}';
-  }
+    /**
+     * 获取0: 平台用户，1:公司用户
+     *
+     * @return type - 0: 平台用户，1:公司用户
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * 设置0: 平台用户，1:公司用户
+     *
+     * @param type 0: 平台用户，1:公司用户
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * @return created_by
+     */
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    /**
+     * @param createdBy
+     */
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /**
+     * @return created_date
+     */
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    /**
+     * @param createdDate
+     */
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    /**
+     * @return last_modified_by
+     */
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    /**
+     * @param lastModifiedBy
+     */
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    /**
+     * @return last_modified_date
+     */
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    /**
+     * @param lastModifiedDate
+     */
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    /**
+     * @return version
+     */
+    public Integer getVersion() {
+        return version;
+    }
+
+    /**
+     * @param version
+     */
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Long> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
+    }
 }

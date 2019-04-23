@@ -28,7 +28,7 @@
                                    placeholder='请输入...'/></FormItem>
                         <FormItem>
                             <Button type="success" :loading="isSaving" @click="saveCodeGroup">保存</Button>&nbsp;&nbsp;
-                            <Button type="ghost" @click="handleCodeGrupFormCancel">取消</Button>
+                            <Button @click="handleCodeGrupFormCancel">取消</Button>
                         </FormItem>
                     </Form>
                     <Spin fix v-if="codeGroupFormLoading">
@@ -102,7 +102,7 @@
                 <div>加载中...</div>
             </Spin>
             <div slot="footer">
-                <Button type="ghost" @click="cancel()" style="margin-left: 8px">取消</Button>
+                <Button @click="cancel()" style="margin-left: 8px">取消</Button>
                 <Button type="success" :loading="isSaving" @click="saveCode()">保存</Button>
             </div>
 
@@ -205,16 +205,48 @@
                         title: '描述',
                         key: 'description',
                         render: (h, params) => {
-                            return params.row.description ? params.row.description : '无';
+                          let result = params.row.description ? params.row.description : '无';
+                            return h('span', result)
                         }
                     },
                     {
                         title: '操作',
                         align: 'center',
                         key: 'handle',
-                        render: (h, params) => {
-                            return this.$common.render(this, h, params);
-                        }
+                      render: (h, params) => {
+                        return h('div', [
+                          h('Button', {
+                            props: {
+                              type: 'success',
+                              size: 'small'
+                            },
+                            class: 'ivu-btn-edit',
+                            style: {
+                              marginRight: '5px'
+                            },
+                            on: {
+                              click: () => {
+                                this.edit(params.index)
+                              }
+                            }
+                          }, '编辑'),
+                          h('Button', {
+                            props: {
+                              type: 'error',
+                              size: 'small'
+                            },
+                            class: 'ivu-btn-delete',
+                            style: {
+                              marginRight: '5px'
+                            },
+                            on: {
+                              click: () => {
+                                this.remove(params.index)
+                              }
+                            }
+                          }, '删除'),
+                        ]);
+                      }
                     }],
                 data: [],
                 codeGroupFormLoading: false,
@@ -225,8 +257,8 @@
             init() {
                 this.codeGroupFormLoading = true;
                 let self = this;
-                this.$api.get('/codeGroup/' + this.codeGroupForm.id, {}).then(function (res) {
-                    self.codeGroupForm = res.data.data;
+                this.$http.get('/codeGroup/' + this.codeGroupForm.id, {}).then(function (res) {
+                    self.codeGroupForm = res.data;
                     self.addCodeButtonDisabled = false;
                     self.codeGroupFormLoading = false;
                     self.getcodeList();
@@ -241,9 +273,9 @@
                     size: this.pageInfo.pageSize || 10,
                     codeGroupCode: this.codeGroupForm.code
                 };
-                this.$api.get('/code', {params: params}).then(function (res) {
+                this.$http.get('/code/list', params).then(function (res) {
                     self.loading = false;
-                    let result = res.data && res.data.data;
+                    let result = res && res.data;
                     self.data = result && result.list;
                     self.pageInfo.total = result && result.total;
                 });
@@ -274,8 +306,8 @@
                 this.editModalTitle = '编辑编码';
                 this.$refs.codeForm.resetFields();
                 this.editModal = true;
-                this.$api.get('/code/' + self.data[index].id, {}).then(function (res) {
-                    self.codeForm = res.data.data;
+                this.$http.get('/code/' + self.data[index].id, {}).then(function (res) {
+                    self.codeForm = res.data;
                     self.editLoading = false;
                 });
             },
@@ -286,24 +318,24 @@
                 this.$refs.codeGroupForm.validate((valid) => {
                     if (valid) {
                         if (this.codeGroupForm.id) {
-                            this.$api.put('/codeGroup', self.codeGroupForm).then(function (res) {
+                            this.$http.put('/codeGroup', self.codeGroupForm).then(function (res) {
                                 self.isSaving = false;
                                 self.editModal = false;
-                                if (res.data.code === 200) {
+                                if (res.code === 200) {
                                     self.$Message.success('修改成功！');
                                 } else {
                                     self.$Message.error('修改失败！服务器内部错误');
                                 }
                             });
                         } else {
-                            this.$api.post('/codeGroup', self.codeGroupForm).then(function (res) {
+                            this.$http.post('/codeGroup', self.codeGroupForm).then(function (res) {
                                 self.isSaving = false;
                                 self.editModal = false;
-                                if (res.data.code === 200) {
+                                if (res.code === 200) {
                                     self.addCodeButtonDisabled = false;
                                     self.$Message.success('添加成功！');
-                                    self.$api.get('/codeGroup/' + res.data.data, {}).then(function (res) {
-                                        self.codeGroupForm = res.data.data;
+                                    self.$http.get('/codeGroup/' + res.data.id, {}).then(function (res) {
+                                        self.codeGroupForm = res.data;
                                     });
                                 } else {
                                     self.$Message.error('添加失败！服务器内部错误');
@@ -317,7 +349,7 @@
             },
             handleCodeGrupFormCancel() {
                 this.$router.push({
-                    name: 'system_code_group',
+                    name: 'code_group',
                 });
             },
             saveCode() {
@@ -326,14 +358,14 @@
                 this.$refs.codeForm.validate((valid) => {
                     if (valid) {
                         if (this.codeForm.id) {
-                            this.$api.put('/code', self.codeForm).then(function (res) {
+                            this.$http.put('/code', self.codeForm).then(function (res) {
                                 self.isSaving = false;
                                 self.editModal = false;
                                 self.getcodeList();
                             });
                         } else {
                             self.codeForm.codeGroupCode = self.codeGroupForm.code;
-                            this.$api.post('/code', self.codeForm).then(function (res) {
+                            this.$http.post('/code', self.codeForm).then(function (res) {
                                 self.isSaving = false;
                                 self.editModal = false;
                                 self.getcodeList();
@@ -348,7 +380,6 @@
             },
             cancel() {
                 this.editModal = false;
-                console.log('cancel');
             },
             remove(index) {
                 this.deleteModal = true;
@@ -358,7 +389,7 @@
             deleteTableInfo() {
                 this.isDeleting = true;
                 var self = this;
-                this.$api.delete('/code/' + self.data[self.deleteIndex].id, {}).then(function (res) {
+                this.$http.delete('/code/' + self.data[self.deleteIndex].id, {}).then(function (res) {
                     self.isDeleting = false;
                     self.deleteModal = false;
                     self.getcodeList();

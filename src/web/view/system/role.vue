@@ -60,9 +60,6 @@
           <Input v-model='roleForm.description' type='textarea' :maxlength=500 style="width: 550px;"
                  :autosize='{minRows: 2,maxRows: 5}' placeholder='请输入...'/>
         </FormItem>
-        <FormItem label='菜单权限:' prop='menuIds'>
-          <Tree :data="menuList" show-checkbox empty-text="暂无菜单" @on-check-change="getCheckMenuList"></Tree>
-        </FormItem>
       </Form>
       <div slot="footer">
         <Button @click="handleReset()" style="margin-left: 8px">取消</Button>
@@ -95,7 +92,6 @@
           code: undefined,
           name: undefined,
           description: undefined,
-          menuIds: [],
         },
         roleFormRule: {
           code: [
@@ -109,17 +105,12 @@
             { required: true, message: 'Description不能为空.', trigger: 'blur' },
             { type: 'string', max: 255, message: 'Description最多255字符', trigger: 'blur' },
           ],
-          menuIds: [
-            { type: 'array', message: '权限不能为空', trigger: 'blur', required: true }
-          ]
         },
         loading: false,
         keepalive: false,
         isSaving: false,
         isDeleting: false,
         pageInfo: {},
-        menuList: [],
-        originMenu: new Map(),
         modalTitle: '',
         permissionList: [],
         editModal: false,
@@ -135,7 +126,38 @@
             align: 'center',
             key: 'handle',
             render: (h, params) => {
-              return this.$render.renderEditDel(this, h, params);
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'success',
+                    size: 'small'
+                  },
+                  class: 'ivu-btn-edit',
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.edit(params.index)
+                    }
+                  }
+                }, '编辑'),
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  class: 'ivu-btn-delete',
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index)
+                    }
+                  }
+                }, '删除'),
+              ]);
             }
           }
         ],
@@ -161,36 +183,6 @@
           }
 
         })
-      },
-
-      getMenuList() {
-        const self = this;
-        this.$http.get('/menu/listMenuBO').then((res) => {
-          if (res.code === 200) {
-            self.originMenu = res.data;
-          }
-        })
-      },
-
-      getCheckMenuList(list) {
-        this.roleForm.menuIds = [];
-        if (list) {
-          list.forEach(item => {
-            this.roleForm.menuIds.push(item.id);
-          })
-        }
-      },
-
-      resetCheckMenu() {
-        const self = this;
-        for (let key in self.originMenu) {
-          self.originMenu[key].forEach(item => {
-            item.checked = false;
-          })
-        }
-        let tmp = JSON.parse(JSON.stringify(self.originMenu[0]));
-        this.sort(tmp);
-        self.menuList = JSON.parse(JSON.stringify(tmp));
       },
 
       sort(data) {
@@ -222,12 +214,10 @@
         this.isSaving = false;
         this.$refs.roleForm.resetFields();
         this.modalTitle = '添加角色';
-        this.resetCheckMenu();
         this.roleForm = {
           code: undefined,
           name: undefined,
           description: undefined,
-          menuIds: [],
         };
         this.editModal = true;
       },
@@ -241,28 +231,9 @@
         this.$http.get('/role/detailInfo/' + self.data[index].id, {}).then((res) => {
           if (res.code === 200) {
             self.roleForm = res.data;
-            console.log(self.roleForm.menuIds);
-            if (self.roleForm.menuIds && self.roleForm.menuIds.length > 0) {
-              for (let key in self.originMenu) {
-                self.originMenu[key].forEach(item => {
-                  item.checked = false;
-                  for (let i=0; i<self.roleForm.menuIds.length; i++) {
-                    if (item.id === self.roleForm.menuIds[i]) {
-                      item.checked = true;
-                    }
-                  }
-                })
-              }
-              let tmp = JSON.parse(JSON.stringify(self.originMenu[0]));
-              self.sort(tmp);
-              self.menuList = JSON.parse(JSON.stringify(tmp));
-            } else {
-              self.resetCheckMenu();
-            }
           } else {
             self.$Message.error('获取role失败！' + res.code);
           }
-
         });
       },
 
@@ -327,7 +298,6 @@
 
     created() {
       this.getList();
-      this.getMenuList();
     },
 
     activated() {

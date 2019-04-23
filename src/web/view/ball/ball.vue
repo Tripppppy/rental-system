@@ -1,227 +1,374 @@
-<!-- ClientCodeGenerator created on 2019/04/22-->
+<!-- ClientCodeGenerator created on 2019/04/23-->
 <style lang="less">
-  @import '../../styles/common.less';
+    @import '../../styles/common.less';
 
 </style>
 
 <template>
-  <div class="smart-crud-container">
+    <div class="smart-crud-container">
 
-    <div class="smart-crud-top">
-      <Row>
-        <Col span="24">
-          <Button class="" type="primary" @click="add">添加</Button>
-          <Input class="pull-right" v-model="searchModel"
-               icon="ios-search" placeholder="搜索..." style="width: 200px" />
-        </Col>
-      </Row>
-    </div>
-    <br>
-    <div class="smart-crud-bottom">
-      <Row>
-        <Col span="24">
-        <Table :loading="loading" :columns="columns" :data="data"></Table>
-
-        <div style="margin: 10px;overflow: hidden">
-          <div style="float: right;">
-            <Page v-model="pageInfo"
-                  :current="pageInfo.pageNum"
-                  :total="pageInfo.total"
-                  :page-size="pageInfo.pageSize"
-                  size="small"
-                  :page-size-opts="[5,10,15]"
-                  @on-change="changePage"
-                  @on-page-size-change="changePageSize"
-                  show-elevator
-                  show-sizer
-                  show-total></Page>
-          </div>
+        <div class="smart-crud-top">
+            <Row>
+                <Col span="24">
+                    <Button class="" type="primary" @click="add">添加</Button>
+                </Col>
+            </Row>
         </div>
-        </Col>
-      </Row>
-    </div>
+        <br>
+        <div class="smart-crud-bottom">
+            <Row>
+                <Col span="24">
+                    <Table :loading="loading" :columns="columns" :data="data"></Table>
 
-    <Modal
-      v-model="editModal"
-      width="700"
-      :loading="isSaving"
-      @on-ok="handleSubmit"
-      @on-cancel="handleReset"
-      ok-text="保存"
-      cancel-text="取消"
-      title="编辑ball">
-      <Form ref='ballForm' :model='ballForm' :rules='ballFormRule' :label-width='80'><FormItem label='球类' prop='ball_id' ><Input v-model='ballForm.ball_id' :maxlength=-1 placeholder='请输入ball_id' /></FormItem><FormItem label='租球人' prop='user_id' ><Input v-model='ballForm.user_id' :maxlength=-1 placeholder='请输入user_id' /></FormItem><FormItem label='租球日期' prop='order_rent_date' ><Input v-model='ballForm.order_rent_date' :maxlength=-1 placeholder='请输入order_rent_date' /></FormItem><FormItem label='还球日期' prop='order_return_date' ><Input v-model='ballForm.order_return_date' :maxlength=-1 placeholder='请输入order_return_date' /></FormItem><FormItem label='实际花费' prop='cost' ><Input v-model='ballForm.cost' :maxlength=-1 placeholder='请输入cost' /></FormItem><FormItem label='订单状态' prop='status' ><Input v-model='ballForm.status' :maxlength=-1 placeholder='请输入status' /></FormItem></Form><div slot="footer">
-            <Button type="ghost" @click="handleReset()" style="margin-left: 8px">取消</Button>
-            <Button type="primary" :loading="isSaving" @click="handleSubmit()">保存</Button>
+                    <div style="margin: 10px;overflow: hidden">
+                        <div style="float: right;">
+                            <Page v-model="pageInfo"
+                                  :current="pageInfo.pageNum"
+                                  :total="pageInfo.total"
+                                  :page-size="pageInfo.pageSize"
+                                  size="small"
+                                  :page-size-opts="[5,10,15]"
+                                  @on-change="changePage"
+                                  @on-page-size-change="changePageSize"
+                                  show-elevator
+                                  show-sizer
+                                  show-total></Page>
+                        </div>
+                    </div>
+                </Col>
+            </Row>
         </div>
-    </Modal>
 
-    <Modal v-model="deleteModal" width="360">
-      <p slot="header" style="color:#f60;text-align:center">
-        <Icon type="information-circled"></Icon>
-        <span>删除ball</span>
-      </p>
-      <div style="text-align:center">
-        <p>删除该ball，将无法恢复！</p>
-        <p>是否删除?</p>
-      </div>
-      <div slot="footer">
-        <Button type="error" size="large" long :loading="isDeleting" @click="deleteItem">删除</Button>
-      </div>
-    </Modal>
-  </div>
+        <Modal
+                v-model="editModal"
+                width="400"
+                :loading="isSaving"
+                @on-ok="handleSubmit"
+                @on-cancel="handleReset"
+                ok-text="保存"
+                cancel-text="取消"
+                title="编辑球类">
+            <Form ref='ballForm' :model='ballForm' :rules='ballFormRule' :label-width='120'>
+                <FormItem label='类型' prop='type' style="width: 270px">
+                    <CodeSelect :codeType="ballType" @emitedCodes="getBallTypeList">
+                        <Select v-model="ballForm.type">
+                            <Option v-for="item in ballTypeList" :value="item.code" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                    </CodeSelect>
+                </FormItem>
+                <FormItem label='品牌' prop='brand' style="width: 270px">
+                    <CodeSelect :codeType="ballBrand" @emitedCodes="getBallBrandList">
+                        <Select v-model="ballForm.brand">
+                            <Option v-for="item in ballBrandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                    </CodeSelect>
+                </FormItem>
+                <FormItem label='库存' prop='stock' style="width: 270px">
+                    <Input v-model='ballForm.stock' number placeholder='请输入库存'/>
+                </FormItem>
+                <FormItem label='日租价格' prop='dayPrice1' style="width: 270px">
+                    <Input v-model='ballForm.dayPrice1' number placeholder='请输入日租价格'/>
+                </FormItem>
+                <FormItem label='日租超出价格' prop='dayPrice2' style="width: 270px">
+                    <Input v-model='ballForm.dayPrice2' number placeholder='请输入日租超出价格'/></FormItem>
+                <FormItem label='月租价格' prop='monthPrice' style="width: 270px">
+                    <Input v-model='ballForm.monthPrice' number placeholder='请输入月租价格'/></FormItem>
+            </Form>
+            <div slot="footer">
+                <Button @click="handleReset()" style="margin-left: 8px">取消</Button>
+                <Button type="primary" :loading="isSaving" @click="handleSubmit()">保存</Button>
+            </div>
+        </Modal>
+
+        <Modal v-model="deleteModal" width="360">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>删除ball</span>
+            </p>
+            <div style="text-align:center">
+                <p>删除该ball，将无法恢复！</p>
+                <p>是否删除?</p>
+            </div>
+            <div slot="footer">
+                <Button type="error" size="large" long :loading="isDeleting" @click="deleteItem">删除</Button>
+            </div>
+        </Modal>
+    </div>
 </template>
 <script>
-export default {
-  name: 'ball',
-  data() {
-    return {
-      searchModel: undefined,
-      ballForm: {ball_id: undefined, user_id: undefined, order_rent_date: undefined, order_return_date: undefined, cost: undefined, status: undefined, },
-      ballFormRule: {ball_id: [{ required: true, message: 'ball_id不能为空.', trigger: 'blur' }, ], user_id: [{ required: true, message: 'user_id不能为空.', trigger: 'blur' }, ], order_rent_date: [{ required: true, message: 'order_rent_date不能为空.', trigger: 'blur' }, ], order_return_date: [{ required: true, message: 'order_return_date不能为空.', trigger: 'blur' }, ], cost: [{ required: true, message: 'cost不能为空.', trigger: 'blur' }, ], status: [{ required: true, message: 'status不能为空.', trigger: 'blur' }, ], },
-      loading: false,
-      keepalive: false,
-      isSaving: false,
-      isDeleting: false,
-      pageInfo: {},
-      editModal: false,
-      deleteModal: false,
-      deleteIndex: '',
-      columns: [ { type: 'index', title: '序号', width: 60, align: 'center' }, { title: '球类', key: 'ball_id' }, { title: '租球人', key: 'user_id' }, { title: '租球日期', key: 'order_rent_date' }, { title: '还球日期', key: 'order_return_date' }, { title: '实际花费', key: 'cost' }, { title: '订单状态', key: 'status' } , { title: '操作', align: 'center', key: 'handle', render: (h, params) => { return this.$common.render(this,h,params); } } ],
-      data: []
-    }
-  },
-  methods: {
-    getList() {
-      this.loading = true;
-      const self = this;
-      const params = {
-        page: this.pageInfo.pageNum || 1,
-        size: this.pageInfo.pageSize || 10
-      };
-      this.$http.get('/ball',  params).then((res) => {
-        self.loading = false;
-        if (res.code === 200) {
-          const result = res.data;
-          self.data = result && result.list;
-          self.pageInfo.total = result && result.total;
-        } else {
-          self.$Message.error('获取数据失败！' + res.code);
-        }
-
-      })
+    import constants from '../shared/constants'
+    import CodeSelect from '../shared/code/CodeSelect'
+  export default {
+    name: 'ball',
+    components: {
+      CodeSelect
     },
-
-    reloadList() {
-      this.pageInfo.pageNum = 1;
-      this.getList();
+    data() {
+      return {
+        searchModel: undefined,
+        ballForm: {
+          type: undefined,
+          brand: undefined,
+          stock: undefined,
+          dayPrice1: undefined,
+          dayPrice2: undefined,
+          monthPrice: undefined,
+        },
+        ballFormRule: {
+          type: { required: true, type: 'string', message: '类型不能为空', trigger: 'change' },
+          brand: { required: true, type: 'string', message: '品牌不能为空', trigger: 'change' },
+          stock: [{required: true, type: 'number', message: '库存不能为空且必须为数字.', trigger: 'blur'},],
+          dayPrice1: [{required: true,type: 'number', message: '日租价格不能为空且必须为数字.', trigger: 'blur'},],
+          dayPrice2: [{required: true,type: 'number', message: '日租超出不能为空且必须为数字.', trigger: 'blur'},],
+          monthPrice: [{required: true,type: 'number', message: '月租不能为空且必须为数字.', trigger: 'blur'},],
+        },
+        loading: false,
+        keepalive: false,
+        isSaving: false,
+        isDeleting: false,
+        pageInfo: {},
+        editModal: false,
+        deleteModal: false,
+        deleteIndex: '',
+        columns: [
+          {
+            type: 'index',
+            title: '序号',
+            width: 60,
+            align: 'center'
+          },
+          {
+            title: '类型',
+            key: 'type',
+            render: (h ,params) => {
+              let result = '';
+              this.ballTypeList.map(item => {
+                if (item.code === params.row.type) {
+                  result = item.name;
+                }
+              });
+              return h('span', result)
+            }
+          },
+          {
+            title: '品牌',
+            key: 'brand',
+            render: (h ,params) => {
+              let result = '';
+              this.ballBrandList.map(item => {
+                if (item.code === params.row.brand) {
+                  result = item.name;
+                }
+              });
+              return h('span', result)
+            }
+          },
+          {
+            title: '库存',
+            key: 'stock'
+          },
+          {
+            title: '日租价格',
+            key: 'dayPrice1'
+          },
+          {
+            title: '日租超出价格',
+            key: 'dayPrice2'
+          },
+          {
+            title: '月租价格',
+            key: 'monthPrice'
+          },
+          {
+            title: '操作',
+            align: 'center',
+            key: 'handle',
+            render: (h, params) => {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'success',
+                    size: 'small'
+                  },
+                  class: 'ivu-btn-edit',
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.edit(params.index)
+                    }
+                  }
+                }, '编辑'),
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  class: 'ivu-btn-delete',
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index)
+                    }
+                  }
+                }, '删除'),
+              ]);
+            }
+          }],
+        data: [],
+        ballTypeList: [],
+        ballBrandList: [],
+        ballType: constants.codeType.ball_type,
+        ballBrand: constants.codeType.ball_brand
+      }
     },
-
-    changePage(currentPage) {
-      this.pageInfo.pageNum = currentPage;
-      this.getList();
-    },
-
-    changePageSize(pageSize) {
-      this.pageInfo.pageSize = pageSize;
-      this.getList();
-    },
-
-    add() {
-      this.isSaving = false;
-      this.ballForm = {ball_id: undefined, user_id: undefined, order_rent_date: undefined, order_return_date: undefined, cost: undefined, status: undefined, };
-      this.editModal = true;
-    },
-
-    edit(index) {
-      this.isSaving = false;
-      const self = this;
-      this.$refs.ballForm.resetFields();
-      this.editModal = true;
-      this.$http.get('/ball/' + self.data[index].id, {}).then((res) => {
-        if (res.code === 200) {
-          self.ballForm = res.data;
-        } else {
-          self.$Message.error('获取ball失败！' + res.code);
-        }
-
-      });
-    },
-
-    handleSubmit() {
-      this.isSaving = true;
-      let self = this;
-      this.$refs.ballForm.validate((valid) => {
-        if (valid) {
-          if (this.ballForm.id) {
-            this.$http.put('/ball', self.ballForm).then((res) => {
-              if (res.code === 200) {
-                self.isSaving = false;
-                self.editModal = false;
-                self.reloadList();
-                self.$Message.success('更新成功！');
-              } else {
-                self.$Message.error('更新失败！' + res.code);
-              }
-            })
+    methods: {
+      getList() {
+        this.loading = true;
+        const self = this;
+        const params = {
+          page: this.pageInfo.pageNum || 1,
+          size: this.pageInfo.pageSize || 10
+        };
+        this.$http.get('/ball', params).then((res) => {
+          self.loading = false;
+          if (res.code === 200) {
+            const result = res.data;
+            self.data = result && result.list;
+            self.pageInfo.total = result && result.total;
           } else {
-            this.$http.post('/ball', self.ballForm).then((res) => {
-              if (res.code === 200) {
-                self.isSaving = false;
-                self.editModal = false;
-                self.reloadList();
-                self.$Message.success('添加成功！');
-              } else {
-                self.$Message.error('添加失败！' + res.code);
-              }
-            })
+            self.$Message.error('获取数据失败！' + res.code);
           }
-        } else {
-          self.isSaving = false;
-          self.$Message.error('表单验证失败！');
-        }
-      })
-    },
-    handleReset() {
-      this.editModal = false;
-      console.log('handleReset');
-    },
-    remove(index) {
-      this.deleteModal = true;
-      this.deleteIndex = index;
-      this.isDeleting = false;
-    },
-    deleteItem() {
-      this.isDeleting = true;
-      const self = this;
-      this.$http.delete('/ball/' + self.data[self.deleteIndex].id, {}).then((res) => {
-        if (res.code === 200) {
-          self.isDeleting = false;
-          self.deleteModal = false;
-          self.reloadList();
-          self.$Message.success('删除成功！');
-        } else {
-          self.$Message.error('删除失败！'+res.code);
-        }
-      });
-    }
-  },
 
-  created() {
-    this.getList();
-  },
+        })
+      },
 
-  activated() {
-    if (this.keepalive) {
-      this.keepalive = false;
+      reloadList() {
+        this.pageInfo.pageNum = 1;
+        this.getList();
+      },
+
+      changePage(currentPage) {
+        this.pageInfo.pageNum = currentPage;
+        this.getList();
+      },
+
+      changePageSize(pageSize) {
+        this.pageInfo.pageSize = pageSize;
+        this.getList();
+      },
+
+      add() {
+        this.isSaving = false;
+        this.ballForm = {
+          type: undefined,
+          brand: undefined,
+          stock: undefined,
+          dayPrice1: undefined,
+          dayPrice2: undefined,
+          monthPrice: undefined,
+        };
+        this.editModal = true;
+      },
+
+      edit(index) {
+        this.isSaving = false;
+        const self = this;
+        this.$refs.ballForm.resetFields();
+        this.editModal = true;
+        this.$http.get('/ball/' + self.data[index].id, {}).then((res) => {
+          if (res.code === 200) {
+            self.ballForm = res.data;
+          } else {
+            self.$Message.error('获取ball失败！' + res.code);
+          }
+
+        });
+      },
+
+      handleSubmit() {
+        this.isSaving = true;
+        let self = this;
+        this.$refs.ballForm.validate((valid) => {
+          if (valid) {
+            if (this.ballForm.id) {
+              this.$http.put('/ball', self.ballForm).then((res) => {
+                if (res.code === 200) {
+                  self.editModal = false;
+                  self.reloadList();
+                  self.$Message.success('更新成功！');
+                } else {
+                  self.$Message.error('更新失败！' + res.code);
+                }
+                self.isSaving = false;
+              })
+            } else {
+              this.$http.post('/ball', self.ballForm).then((res) => {
+                if (res.code === 200) {
+                  self.editModal = false;
+                  self.reloadList();
+                  self.$Message.success('添加成功！');
+                } else {
+                  self.$Message.error('添加失败！' + res.code);
+                }
+                self.isSaving = false;
+              })
+            }
+          } else {
+            self.isSaving = false;
+            self.$Message.error('表单验证失败！');
+          }
+        })
+      },
+      handleReset() {
+        this.editModal = false;
+        console.log('handleReset');
+      },
+      remove(index) {
+        this.deleteModal = true;
+        this.deleteIndex = index;
+        this.isDeleting = false;
+      },
+      deleteItem() {
+        this.isDeleting = true;
+        const self = this;
+        this.$http.delete('/ball/' + self.data[self.deleteIndex].id, {}).then((res) => {
+          if (res.code === 200) {
+            self.isDeleting = false;
+            self.deleteModal = false;
+            self.reloadList();
+            self.$Message.success('删除成功！');
+          } else {
+            self.$Message.error('删除失败！' + res.code);
+          }
+        });
+      },
+      getBallTypeList(data) {
+        this.ballTypeList = data.data;
+      },
+      getBallBrandList(data) {
+        this.ballBrandList = data.data;
+      },
+    },
+
+    created() {
       this.getList();
+    },
+
+    activated() {
+      if (this.keepalive) {
+        this.keepalive = false;
+        this.getList();
+      }
+    },
+
+    deactivated() {
+      this.keepalive = true;
     }
-  },
 
-  deactivated() {
-    this.keepalive = true;
   }
-
-}
 
 </script>
