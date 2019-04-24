@@ -10,9 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 
-/**
- * Created by CodeGenerator on 2019/04/22.
- */
 @Service
 @Transactional
 public class OrderServiceImpl extends AbstractService<Order> implements OrderService {

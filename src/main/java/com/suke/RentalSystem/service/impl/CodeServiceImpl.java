@@ -14,9 +14,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-/**
- * Created by CodeGenerator on 2018/06/21.
- */
 @Service
 @Transactional
 public class CodeServiceImpl extends AbstractService<Code> implements CodeService {

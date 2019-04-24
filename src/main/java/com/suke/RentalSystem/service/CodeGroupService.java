@@ -6,9 +6,7 @@ import com.suke.RentalSystem.model.CodeGroup;
 
 import java.util.List;
 
-/**
- * Created by smartsoft on 2018/09/07.
- */
+
 public interface CodeGroupService extends Service<CodeGroup> {
     /**
      * filter

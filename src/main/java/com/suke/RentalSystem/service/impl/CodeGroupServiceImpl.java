@@ -12,9 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 
-/**
- * Created by smartsoft on 2018/09/07.
- */
+
 @Service
 @Transactional
 public class CodeGroupServiceImpl extends AbstractService<CodeGroup> implements CodeGroupService {
