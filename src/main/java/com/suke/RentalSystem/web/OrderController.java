@@ -1,5 +1,6 @@
 package com.suke.RentalSystem.web;
 
+import com.suke.RentalSystem.bo.OrderConfirmParamBO;
 import com.suke.RentalSystem.core.Result;
 import com.suke.RentalSystem.core.ResultGenerator;
 import com.suke.RentalSystem.model.Order;
@@ -57,9 +58,14 @@ public class OrderController {
         List<Order> list = orderService.findAll();
         list.forEach(item -> {
             item.setUser(userService.findById(item.getUserId()));
-            item.setBall(ballService.findById(item.getBallId()));
         });
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/confirm/{id}")
+    public Result orderConfirm(@RequestBody List<OrderConfirmParamBO> data, @PathVariable Long id) {
+        List<Long> list = orderService.orderConfirm(data, id);
+        return ResultGenerator.genSuccessResult(list);
     }
 }

@@ -19,4 +19,33 @@
     <result column="version" jdbcType="INTEGER" property="version" />
     <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
   </resultMap>
+
+    <select id="search" resultMap="BaseResultMap">
+      SELECT * FROM tbl_ball
+      <where>
+        stock != 0
+        <if test="param != null">
+          <if test="param.type != null and param.type != 'null'">
+            AND type = #{param.type}
+          </if>
+          <if test="param.brand != null and param.brand != 'null'">
+            AND brand = #{param.brand}
+          </if>
+          <if test="param.minDayPrice != null and  param.maxDayPrice != null ">
+            AND day_price between #{param.minDayPrice} and #{param.maxDayPrice}
+          </if>
+          <if test="param.minMonthPrice != null and  param.maxMonthPrice != null ">
+            AND day_price between #{param.minMonthPrice} and #{param.maxMonthPrice}
+          </if>
+        </if>
+      </where>
+    </select>
+
+  <select id="findByIdList" resultMap="BaseResultMap" parameterType="list">
+    SELECT * FROM tbl_ball WHERE id in (
+    <foreach collection="idList" item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    )
+  </select>
 </mapper>

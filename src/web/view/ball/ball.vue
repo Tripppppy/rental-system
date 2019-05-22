@@ -117,7 +117,10 @@
                         :outputType="cut.outputType"
                         :autoCrop="cut.autoCrop"
                         :autoCropWidth="cut.autoCropWidth"
-                        :autoCropHeight="cut.autoCropHeight">
+                        :autoCropHeight="cut.autoCropHeight"
+                        :fixed="cut.fixed"
+                        :canScale="cut.canScale"
+                        :fixedNumber="cut.fixedNumber">
                 </vueCropper>
             </div>
             <div slot="footer">
@@ -267,7 +270,10 @@
           outputType: 'jpeg || png || web',
           autoCrop: true,
           autoCropWidth: 200,
-          autoCropHeight: 200
+          autoCropHeight: 200,
+          canScale: true,
+          fixed: true,
+          fixedNumber: [1, 1]
         },
       }
     },
@@ -320,6 +326,10 @@
         };
         this.$refs.ballForm.resetFields();
         this.editModal = true;
+      },
+      cancelReset() {
+        this.showCropedImage = false;
+        console.log('cancelReset');
       },
 
       edit(index) {

@@ -1,5 +1,6 @@
 package com.suke.RentalSystem.web;
 
+import com.suke.RentalSystem.bo.BallSearchParamBO;
 import com.suke.RentalSystem.core.Result;
 import com.suke.RentalSystem.core.ResultGenerator;
 import com.suke.RentalSystem.model.Ball;
@@ -56,6 +57,14 @@ public class BallController {
             item.setBrandName(codeService.findByCode(item.getBrand()).getName());
             item.setTypeName(codeService.findByCode(item.getType()).getName());
         });
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/search")
+    public Result search(@RequestBody(required = false) BallSearchParamBO paramBO, @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+        PageHelper.startPage(page, size);
+        List<Ball> list = ballService.search(paramBO);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

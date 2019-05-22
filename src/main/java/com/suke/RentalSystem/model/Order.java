@@ -13,12 +13,6 @@ public class Order {
     /**
      * 外键
      */
-    @Column(name = "ball_id")
-    private Long ballId;
-
-    /**
-     * 外键
-     */
     @Column(name = "user_id")
     private Long userId;
 
@@ -76,24 +70,6 @@ public class Order {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * 获取外键
-     *
-     * @return ball_id - 外键
-     */
-    public Long getBallId() {
-        return ballId;
-    }
-
-    /**
-     * 设置外键
-     *
-     * @param ballId 外键
-     */
-    public void setBallId(Long ballId) {
-        this.ballId = ballId;
     }
 
     /**

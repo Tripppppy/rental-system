@@ -1,0 +1,126 @@
+
+.orderGeneral,.orderBooking{
+  display: flex;
+  flex-wrap: wrap;
+  .menu_item {
+    width: 224px;
+    height: 68px;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    &:hover {
+      //opacity: 0.7;
+      height: 68px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0px 6px 10px rgba(4,4,4,0.22);
+    }
+    &_wrapper{
+      height:100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .text{
+    font-size: 20px;
+    line-height:20px;
+    font-family: 'PingFang-SC-Medium',Sans-serif;
+    color: #000;
+  }
+
+  .paneinner_left{
+    background-color:white ;
+    margin-bottom: 20px;
+    height: 229px;
+    cursor: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-shadow: -1px 1px 9px rgba(66,66,66,0.26);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
+  .paneinner_right{
+    margin:auto 11px;
+    cursor: auto;
+    min-width: 368px;
+    -webkit-box-sizing: border-box;
+    border: solid 0 transparent;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    //background-color: white;
+  }
+
+  .user_avatar{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    //position: absolute;
+    margin:11px 131px 11px 44px;
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+  }
+  .result{
+    padding: 0 10px;
+    line-height: 40px;
+    border-bottom: 1px solid #e7e7e7;
+    font-size: 18px;
+  }
+
+  .user_detail{
+    height:100%;
+    display: flex;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .name{
+    width:204px;
+    line-height:18px;
+    font-size: 18px;
+    font-family:MicrosoftYaHei;
+    margin-bottom: 36px;
+    text-align: center;
+  }
+  .tipsnum{
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 50%;
+    background: #bd5050;
+    color: #fff;
+    font-weight: 500;
+    position: absolute;
+    margin-left:110px;
+    margin-top:-30px;
+  }
+  .ivu-card-body{  height:100%;}
+  .ivu-form{
+    width:202px;
+  }
+  .ivu-form .ivu-form-item-label{
+    padding-right:0px;
+    font-size: 14px;
+    font-family:PingFang-SC-Medium;
+  }
+  .ivu-form-item-content{
+    font-family: MicrosoftYaHei;
+  }
+  .pickForm{
+    width:auto !important;
+  }
+  .img-wrapper{
+    display: inline-block;
+    margin-left: -12px;
+    margin-right: 10px;
+    z-index:1;
+    float: right;
+    margin-top:17px;
+  }
+}
