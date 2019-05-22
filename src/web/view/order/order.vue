@@ -49,7 +49,7 @@
                 title="编辑order">
             <Form ref='orderForm' :model='orderForm' :rules='orderFormRule' :label-width='120'>
                 <FormItem label='还球日期' prop='orderReturnDate' style="width: 270px">
-                    <Input v-model='orderForm.orderReturnDate' placeholder='请输入还球日期'/></FormItem>
+                    <DatePicker type="date" v-model='orderForm.orderReturnDate' placeholder='请输入还球日期'/></FormItem>
                 <FormItem label='实际花费' prop='cost' style="width: 270px">
                     <Input v-model='orderForm.cost' number placeholder='请输入cost'/>
                 </FormItem>
@@ -80,6 +80,23 @@
                 <Button type="error" size="large" long :loading="isDeleting" @click="deleteItem">删除</Button>
             </div>
         </Modal>
+
+        <Modal
+                v-model="orderBallModal"
+                width="850"
+                title="订单球类"
+                :styles="{top: '20px'}">
+            <Table :columns="orderBallColumns" :data="orderBallData"></Table>
+            <div slot="footer">
+                <Button @click="orderBallModal = false" style="margin-left: 8px">取消</Button>
+            </div>
+        </Modal>
+
+        <CodeSelect :codeType="ballType" @emitedCodes="getBallTypeList">
+        </CodeSelect>
+
+        <CodeSelect :codeType="ballBrand" @emitedCodes="getBallBrandList">
+        </CodeSelect>
     </div>
 </template>
 <script>
@@ -99,7 +116,7 @@
           status: undefined,
         },
         orderFormRule: {
-          orderReturnDate: [{required: true, message: '还球日期不能为空.', trigger: 'blur'},],
+          orderReturnDate: [{required: true, type:'date', message: '还球日期不能为空.', trigger: 'change'},],
           cost: [{required: true, type: 'number',message: '实际花费不能为空且必须为数字.', trigger: 'blur'},],
           status: [{required: true, message: '状态不能为空.', trigger: 'blur'},],
         },
@@ -122,7 +139,15 @@
             title: '球类',
             key: 'ball_id',
             render: (h, params) => {
-              return h('span', params.row.ball.brandName + ' ' + params.row.ball.typeName)
+              return h('a', {
+                on: {
+                  click: () => {
+                    this.orderBallData = [];
+                    this.orderBallData = this.data[params.index].balls;
+                    this.orderBallModal = true;
+                  }
+                }
+              },'查看')
             }
           },
           {
@@ -134,11 +159,15 @@
           },
           {
             title: '租球日期',
-            key: 'orderRentDate'
+            key: 'orderRentDate',
           },
           {
             title: '还球日期',
             key: 'orderReturnDate'
+          },
+          {
+            title: '预计花费',
+            key: 'predictCost'
           },
           {
             title: '实际花费',
@@ -198,7 +227,76 @@
         }],
         data: [],
         orderStatus: constants.codeType.order_status,
-        orderStatusList: []
+        orderStatusList: [],
+        orderBallModal: false,
+        orderBallColumns: [
+          {
+            type: 'index',
+            title: '序号',
+            width: 60,
+            align: 'center'
+          },
+          {
+            title: '类型',
+            key: 'typeName',
+            render: (h, params) => {
+              let typeName = '';
+              this.ballTypeList.map(item => {
+                if (item.code === params.row.type) {
+                  typeName = item.name;
+                }
+              });
+              return h('span', typeName)
+            }
+          },
+          {
+            title: '品牌',
+            key: 'brandName',
+            render: (h, params) => {
+              let brandName = '';
+              this.ballBrandList.map(item => {
+                if (item.code === params.row.brand) {
+                  brandName = item.name;
+                }
+              });
+              return h('span', brandName)
+            }
+          },
+          {
+            title: '图片', key: 'imageUrl',
+            render: (h, params) => {
+              return h('img', {
+                domProps: {
+                  align: 'center',
+                  src: params.row.imageUrl,
+                },
+                style: {
+                  width: '45px',
+                }
+              })
+            }
+          },
+          {
+            title: '日租价格',
+            key: 'dayPrice1'
+          },
+          {
+            title: '日租超出价格',
+            key: 'dayPrice2'
+          },
+          {
+            title: '月租价格',
+            key: 'monthPrice'
+          },
+          {
+            title: '已选数量',
+            key: 'count'
+          }],
+        orderBallData: [],
+        ballType: constants.codeType.ball_type,
+        ballBrand: constants.codeType.ball_brand,
+        ballTypeList: [],
+        ballBrandList: [],
       }
     },
     methods: {
@@ -324,7 +422,13 @@
       },
       getOrderStatusList(data) {
         this.orderStatusList = data.data;
-      }
+      },
+      getBallTypeList(data) {
+        this.ballTypeList = data.data;
+      },
+      getBallBrandList(data) {
+        this.ballBrandList = data.data;
+      },
     },
 
     created() {

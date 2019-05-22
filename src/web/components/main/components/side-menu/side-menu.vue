@@ -4,19 +4,8 @@
     <Menu ref="menu" v-show="!collapsed" :active-name="activeName" :open-names="openedNames"
           :accordion="accordion" :theme="theme" width="auto" @on-select="handleSelect">
       <template v-for="item in menuList">
-        <template v-if="item.children && item.children.length === 1 && item.meta && !item.meta.noauth">
-          <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`" :parent-item="item"></side-menu-item>
-          <menu-item v-else :name="getNameOrHref(item, true)" :key="`menu-${item.children[0].name}`">
-            <common-icon :type="item.children[0].icon || ''"/><span>{{ showTitle(item.children[0]) }}</span>
-          </menu-item>
-        </template>
-        <template v-else>
-          <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`" :parent-item="item"></side-menu-item>
-          <template v-else>
-            <menu-item v-if="!item.meta.hideInMenu" :name="getNameOrHref(item)" :key="`menu-${item.name}`">
-              <common-icon :type="item.icon || ''"/><span>{{ showTitle(item) }}</span>
-            </menu-item>
-          </template>
+        <template>
+          <side-menu-item :key="`menu-${item.name}`" :parent-item="item"></side-menu-item>
         </template>
       </template>
     </Menu>
@@ -123,6 +112,7 @@
       }
     },
     mounted () {
+      console.log(this.menuList)
       this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name))
     }
   }

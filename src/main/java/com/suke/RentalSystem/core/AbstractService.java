@@ -120,7 +120,9 @@ public abstract class AbstractService<T> implements Service<T> {
     public int save(List<T> models) {
         models.forEach(model -> {
             this.populateAuditInfo(model, "create");
-            Reflections.invokeSetter(model, field_name_version, 1);
+            if (isFieldExist(model, field_name_version)) {
+                Reflections.invokeSetter(model, field_name_version, 1);
+            }
         });
         return mapper.insertList(models);
     }

@@ -7,12 +7,14 @@ import com.suke.RentalSystem.core.ResultCode;
 import com.suke.RentalSystem.core.ResultGenerator;
 import com.suke.RentalSystem.dto.FileResultDTO;
 import com.suke.RentalSystem.model.User;
+import com.suke.RentalSystem.service.RoleService;
 import com.suke.RentalSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
@@ -24,6 +26,8 @@ public class UserController {
 
   @Autowired
   private UserService userService;
+  @Resource
+  private RoleService roleService;
 
   @PostMapping("/login")
   public Result login(@RequestBody User user) {
@@ -34,7 +38,9 @@ public class UserController {
     if (list.isEmpty()) {
       return ResultGenerator.genFailResult("登录名或密码错误");
     } else {
-      return ResultGenerator.genSuccessResult(list.get(0));
+      User user1 = list.get(0);
+      user1.setRoles(roleService.findRolesByUserId(user1.getId()));
+      return ResultGenerator.genSuccessResult(user1);
     }
   }
 

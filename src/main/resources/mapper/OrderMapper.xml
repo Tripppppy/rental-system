@@ -6,11 +6,11 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="ball_id" jdbcType="BIGINT" property="ballId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="order_rent_date" jdbcType="TIMESTAMP" property="orderRentDate" />
     <result column="order_return_date" jdbcType="TIMESTAMP" property="orderReturnDate" />
     <result column="cost" jdbcType="DOUBLE" property="cost" />
+    <result column="predict_cost" jdbcType="DOUBLE" property="predictCost" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="created_by" jdbcType="BIGINT" property="createdBy" />
     <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />

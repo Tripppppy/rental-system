@@ -8,6 +8,9 @@ export default {
     iconSize: Number
   },
   computed: {
+    role() {
+      return this.parentItem.role;
+    },
     parentName () {
       return this.parentItem.name
     },
@@ -16,6 +19,27 @@ export default {
     },
     textColor () {
       return this.theme === 'dark' ? '#fff' : '#495060'
+    },
+    userIdentity() {
+      return this.$store.state.user.userIdentity;
+    },
+    isHasPermission() {
+      let userRoleList = this.userIdentity.roles;
+      let flag = false;
+      if (this.role) {
+        userRoleList.map(role => {
+          this.role.map(item => {
+            if (item === role.code) {
+              flag = true;
+            }
+          });
+        })
+      } else {
+        flag = true;
+      }
+      return flag;
     }
+  },
+  created() {
   }
 }

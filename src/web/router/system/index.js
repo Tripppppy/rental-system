@@ -6,6 +6,7 @@ import userRouter from './userRouter'
 export default {
 	path: '/system',
 	name: '系统管理',
+  role: ['ROLE_ADMIN'],
   meta: {
     icon: 'ios-stats',
   },

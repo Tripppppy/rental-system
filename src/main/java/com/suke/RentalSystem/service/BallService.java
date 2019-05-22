@@ -11,4 +11,6 @@ public interface BallService extends Service<Ball> {
     List<Ball> search(BallSearchParamBO paramBO);
 
     List<Ball> findByIdList(List<Long> idList);
+
+    List<Ball> findByOrderId(Long id);
 }

@@ -38,7 +38,7 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
 //        genCodeByCustomModelName("tbl_ball", "Ball");
-        genCodeByCustomModelName("tbl_order", "Order");
+        genCodeByCustomModelName("tbl_order_ball", "OrderBall");
     }
 
     /**

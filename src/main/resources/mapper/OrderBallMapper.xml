@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suke.RentalSystem.dao.OrderBallMapper">
+  <resultMap id="BaseResultMap" type="com.suke.RentalSystem.model.OrderBall">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <id column="ball_id" jdbcType="BIGINT" property="ballId" />
+    <result column="count" javaType="INTEGER" property="count"/>
+  </resultMap>
+</mapper>

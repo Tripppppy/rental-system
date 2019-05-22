@@ -5,6 +5,7 @@ export default {
 	path: '/order',
 	name: '订单',
 	component: Main,
+  role: ['ROLE_ADMIN'],
   meta: {
     icon: 'ios-stats',
   },

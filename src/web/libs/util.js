@@ -49,7 +49,8 @@ export const getMenuByRouter = (list, access) => {
       let obj = {
         icon: (item.meta && item.meta.icon) || '',
         name: item.name,
-        meta: item.meta
+        meta: item.meta,
+        role: item.role
       }
       if ((hasChild(item) || (item.meta && item.meta.showAlways)) && showThisMenuEle(item, access)) {
         obj.children = getMenuByRouter(item.children, access)

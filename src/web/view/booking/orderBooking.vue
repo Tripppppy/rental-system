@@ -113,8 +113,9 @@
                 title="确认订单"
                 :styles="{top: '20px'}">
             <span>还球时间：</span>
-            <DatePicker v-model="returnData" type="date" placeholder="请选择还球时间" style="width: 200px;margin-bottom: 20px"></DatePicker>
+            <DatePicker v-model="returnDate" type="date" placeholder="请选择还球时间" style="width: 200px;margin-bottom: 20px" @on-change="getReturnDate"></DatePicker>
             <Table :loading="confirmModalLoading" :columns="columns" :data="data"></Table>
+            <p style="text-align: right;margin-top: 20px">预计花费：<span style="color: #ed2010;">￥{{getTotalCost}}</span></p>
             <div slot="footer">
                 <Button @click="handleConfirmReset()" style="margin-left: 8px">取消</Button>
                 <Button type="primary" :loading="confirmButtonLoading" @click="totalProdList()">确认订单</Button>
@@ -126,6 +127,7 @@
 <script>
   import CodeSelect from '@/view/shared/code/CodeSelect.vue';
   import constants from '../shared/constants'
+  import DateUtil from "../../libs/DateUtil";
 
   export default {
     components: {
@@ -231,13 +233,32 @@
             key: 'count'
           }],
         data: [],
-        returnData: ''
+        returnDate: ''
       }
     },
     computed: {
       userIdentity () {
         return this.$store.state.user.userIdentity;
       },
+      getTotalCost() {
+        let cost = 0;
+        if (this.returnDate) {
+          let startTime = new Date().getTime();
+          let endTime = this.returnDate.getTime();
+          let dates = Math.floor((endTime - startTime) / (3600 * 24 * 1e3)) + 1;
+          if (dates < 30) {
+            this.data.map(item => {
+              cost += item.dayPrice1 * dates;
+            })
+          } else {
+            this.data.map(item => {
+              cost += item.monthPrice * Math.floor(dates / 30);
+              cost += item.dayPrice1 * (dates % 30)
+            })
+          }
+        }
+        return cost;
+      }
     },
     methods: {
       reloadBallList() {
@@ -356,15 +377,16 @@
               this.data.push(item.data)
             }
           });
-          this.returnData = ''
+          this.returnDate = ''
           this.resetColumns();
+          this.confirmButtonLoading = false;
           this.confirmModal = true;
         } else {
           this.$Message.error("您还没有选择任何商品，不可下单");
         }
       },
       totalProdList() {
-        if (this.returnData) {
+        if (this.returnDate) {
           this.confirmButtonLoading = true;
           let data = [];
           this.sumList.map(item => {
@@ -373,7 +395,10 @@
               count: item.count
             })
           });
-          this.$http.post('/order/confirm/' + this.userIdentity.id, data).then((res) => {
+          this.$http.post('/order/confirm/'
+            + this.userIdentity.id + "?returnDate="
+            + DateUtil.formatDate(this.returnDate, 'yyyy-MM-dd hh:mm:ss')
+            + "&predictCost=" + this.getTotalCost, data).then((res) => {
             if (res.code === 200) {
               if (res.data && res.data.length) {
                 this.resetColumns();
@@ -396,6 +421,7 @@
                   }
                 })
               } else {
+                this.$Message.success("下单成功")
                 this.confirmModal = false;
                 this.sumList = [];
                 this.getBallList();
@@ -403,6 +429,8 @@
             } else {
               this.$Message.error("下单失败，请重新下单")
             }
+            this.confirmButtonLoading = false;
+          }).catch(err => {
             this.confirmButtonLoading = false;
           });
         } else {
@@ -415,6 +443,14 @@
       resetColumns() {
         if (this.columns.length === 9) {
           this.columns.splice(this.columns.length - 1)
+        }
+      },
+      getReturnDate(value) {
+        let returnDate = new Date(value);
+        let today = new Date().setHours(0, 0, 0, 0);
+        if (today > returnDate) {
+          this.$Message.error("还球时间选择有误，请重新选择");
+          this.returnDate = "";
         }
       }
     },

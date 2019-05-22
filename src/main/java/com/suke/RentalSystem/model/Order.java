@@ -2,6 +2,7 @@ package com.suke.RentalSystem.model;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "tbl_order")
@@ -20,7 +21,7 @@ public class Order {
      * 借球日期
      */
     @Column(name = "order_rent_date")
-    private Date orderRentDate;
+    private LocalDateTime orderRentDate;
 
     /**
      * 还球日期
@@ -32,6 +33,9 @@ public class Order {
      * 实际花费
      */
     private Double cost;
+
+    @Column(name = "predict_cost")
+    private Double predictCost;
 
     /**
      * 订单状态
@@ -48,7 +52,7 @@ public class Order {
     private Long lastModifiedBy;
 
     @Column(name = "last_modified_date")
-    private Date lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     private Integer version;
 
@@ -56,7 +60,7 @@ public class Order {
     private User user;
 
     @Transient
-    private Ball ball;
+    private List<Ball> balls;
 
     /**
      * @return id
@@ -95,7 +99,7 @@ public class Order {
      *
      * @return order_rent_date - 借球日期
      */
-    public Date getOrderRentDate() {
+    public LocalDateTime getOrderRentDate() {
         return orderRentDate;
     }
 
@@ -104,7 +108,7 @@ public class Order {
      *
      * @param orderRentDate 借球日期
      */
-    public void setOrderRentDate(Date orderRentDate) {
+    public void setOrderRentDate(LocalDateTime orderRentDate) {
         this.orderRentDate = orderRentDate;
     }
 
@@ -207,14 +211,14 @@ public class Order {
     /**
      * @return last_modified_date
      */
-    public Date getLastModifiedDate() {
+    public LocalDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
     /**
      * @param lastModifiedDate
      */
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 
@@ -240,11 +244,19 @@ public class Order {
         this.user = user;
     }
 
-    public Ball getBall() {
-        return ball;
+    public List<Ball> getBalls() {
+        return balls;
     }
 
-    public void setBall(Ball ball) {
-        this.ball = ball;
+    public void setBalls(List<Ball> balls) {
+        this.balls = balls;
+    }
+
+    public Double getPredictCost() {
+        return predictCost;
+    }
+
+    public void setPredictCost(Double predictCost) {
+        this.predictCost = predictCost;
     }
 }

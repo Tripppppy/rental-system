@@ -70,6 +70,9 @@ public class Ball {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Transient
+    private Integer count;
+
     /**
      * 获取主键
      *
@@ -288,5 +291,13 @@ public class Ball {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

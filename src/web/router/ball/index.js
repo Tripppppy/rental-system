@@ -4,6 +4,7 @@ import Main from '@/components/main'
 export default {
 	path: '/ball',
 	name: '球类',
+  role: ['ROLE_ADMIN'],
   meta: {
     icon: 'ios-stats',
 	},
