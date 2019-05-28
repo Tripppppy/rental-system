@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +25,12 @@ public class UserRoleServiceImpl extends AbstractService<UserRole> implements Us
 
     @Override
     public void saveUserRole(Long userId, List<Long> roleIds) {
+        if (roleIds == null) {
+            roleIds = new ArrayList<>();
+        }
+        if (roleIds.isEmpty()) {
+            roleIds.add(30L);
+        }
         tblUserRoleMapper.save(userId,roleIds);
     }
 }

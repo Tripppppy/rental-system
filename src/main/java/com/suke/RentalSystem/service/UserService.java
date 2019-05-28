@@ -9,7 +9,7 @@ public interface UserService extends Service<User> {
 
     User findByLoginName(String loginName);
 
-    Long saveUser(User user);
+    Boolean saveUser(User user);
 
     User getUserIdentity(Long userId);
 

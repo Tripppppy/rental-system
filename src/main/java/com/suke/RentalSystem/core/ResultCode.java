@@ -9,7 +9,8 @@ public enum ResultCode {
     UNAUTHORIZED(401),//未认证（签名错误）
     NOT_FOUND(404),//接口不存在
     INTERNAL_SERVER_ERROR(500),//服务器内部错误
-    USER_NOT_EXIST(501); // 用户不存在
+    USER_NOT_EXIST(501), // 用户不存在
+    USER_EXIST(502); // 用户不存在
 
     public int code;
 

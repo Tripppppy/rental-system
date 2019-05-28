@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,15 +40,15 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     }
 
     @Override
-    public Long saveUser(User user) {
+    public Boolean saveUser(User user) {
+        boolean result = true;
         User checkUser = this.findByLoginName(user.getLoginName());
         if (checkUser != null) {
-            throw new ServiceException("用户已存在");
-        }
-        user.setImageUrl("http://img.kimen.xyz/psb.png");
-        Long result = super.save(user);
-        if (user.getRoleIds() != null && user.getRoleIds().size() > 0) {
-            userRoleService.saveUserRole(result,user.getRoleIds());
+            result = false;
+        } else {
+            user.setImageUrl("http://img.kimen.xyz/psb.png");
+            super.save(user);
+            userRoleService.saveUserRole(user.getId(),user.getRoleIds());
         }
         return result;
     }

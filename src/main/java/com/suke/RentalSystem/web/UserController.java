@@ -52,8 +52,12 @@ public class UserController {
    */
   @PostMapping
   public Result add(@Validated @RequestBody User user) {
-    userService.saveUser(user);
-    return ResultGenerator.genSuccessResult();
+    Boolean result = userService.saveUser(user);
+    if (result) {
+      return ResultGenerator.genSuccessResult();
+    } else {
+      return ResultGenerator.genFailResult(ResultCode.USER_EXIST, "用户已存在");
+    }
   }
 
   /**
