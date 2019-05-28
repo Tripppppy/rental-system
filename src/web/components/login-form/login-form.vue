@@ -15,8 +15,10 @@
         </span>
                 </Input>
             </FormItem>
-            <div style="margin-top: -8px;margin-bottom: 6px;text-align: center">
-                <span style="font-size: 10px">还没有账号？<a @click="startRegister">点击注册</a></span>
+            <div style="margin-top: -8px;margin-bottom: 6px;text-align: center;font-size: 10px">
+                <span>还没有账号？<a @click="startRegister">点击注册</a></span>
+                <p>或</p>
+                <p>直接 <a @click="handleVisitorLogin">游客登录</a></p>
             </div>
             <FormItem>
                 <Button @click="handleSubmit" type="primary" long>登录</Button>
@@ -50,7 +52,7 @@
                 </FormItem>
             </Form>
             <div slot="footer">
-                <Button @click="handleReset()" style="margin-left: 8px">取消</Button>
+                <Button @click="registerModal = false" style="margin-left: 8px">取消</Button>
                 <Button type="success" @click="handleRegister()" :loading="registerLoading">{{registerButtonText}}
                 </Button>
             </div>
@@ -140,6 +142,12 @@
               password: this.form.password
             })
           }
+        })
+      },
+      handleVisitorLogin() {
+        this.$emit('on-success-valid', {
+          loginName: '游客',
+          password: '游客'
         })
       },
       handleRegister() {

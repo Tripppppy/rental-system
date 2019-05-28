@@ -6,7 +6,7 @@ export default {
 	path: '/booking',
 	name: '下单',
 	component: Main,
-  role: ['ptUser'],
+  role: ['ROLE_COMMON_USER', 'ROLE_VISITOR'],
   meta: {
     icon: 'ios-stats',
   },

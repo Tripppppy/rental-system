@@ -31,17 +31,27 @@ export default {
     ]),
     handleSubmit (loginFormData) {
       loginFormData.loginName = loginFormData.loginName.trim()
-      this.$http.post('/user/login', loginFormData).then((res) => {
-        if (res.code === 200) {
-          this.setToken(JSON.stringify(loginFormData));
-          this.setUserIdentity(res.data);
-          this.$router.push({
-            name: this.$config.homeName
-          })
-        } else {
-          this.$Message.error(res.message);
-        }
-      })
+      if (loginFormData.loginName === '游客') {
+        this.setToken(JSON.stringify(loginFormData));
+        loginFormData.imageUrl = 'http://img.kimen.xyz/psb.png';
+        loginFormData.roles = [{id: 30, code: 'ptUser'}]
+        this.setUserIdentity(loginFormData);
+        this.$router.push({
+          name: this.$config.homeName
+        })
+      } else {
+        this.$http.post('/user/login', loginFormData).then((res) => {
+          if (res.code === 200) {
+            this.setToken(JSON.stringify(loginFormData));
+            this.setUserIdentity(res.data);
+            this.$router.push({
+              name: this.$config.homeName
+            })
+          } else {
+            this.$Message.error(res.message);
+          }
+        })
+      }
     },
   }
 }
