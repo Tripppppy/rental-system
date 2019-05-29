@@ -211,6 +211,7 @@
             key: 'handle',
             render: (h, params) => {
               let returnButton = '';
+              let rentalButton = '';
               if (params.row.status === 'RENTALING') {
                 returnButton = h('Button', {
                   props: {
@@ -233,7 +234,23 @@
                   }
                 }, '还球');
               }
+              if (params.row.status === 'ORDERED') {
+                rentalButton = h('Button', {
+                  props: {
+                    size: 'small'
+                  },
+                  class: 'ivu-btn-edit',
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                    }
+                  }
+                }, '租球');
+              }
             return h('div', [
+              rentalButton,
               returnButton,
               h('Button', {
                 props: {
