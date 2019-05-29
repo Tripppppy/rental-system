@@ -92,6 +92,18 @@
             </div>
         </Modal>
 
+        <Modal
+                v-model="returnBallModal"
+                width="200"
+                title="请确认还球金额"
+                :styles="{top: '20px'}">
+            <p style="text-align: center">实际花费：{{getTotalCost}}</p>
+            <div slot="footer">
+                <Button @click="returnBallModal = false" style="margin-left: 8px">取消</Button>
+                <Button type="primary" :loading="isSaving" @click="handleReturn()">确认还球</Button>
+            </div>
+        </Modal>
+
         <CodeSelect :codeType="ballType" @emitedCodes="getBallTypeList">
         </CodeSelect>
 
@@ -102,6 +114,7 @@
 <script>
   import constants from '../shared/constants'
   import CodeSelect from '../shared/code/CodeSelect'
+  import DateUtil from "../../libs/DateUtil";
   export default {
     name: 'order',
     components: {
@@ -160,10 +173,16 @@
           {
             title: '租球日期',
             key: 'orderRentDate',
+            render: (h, params) => {
+              return h('span', DateUtil.formatDate(new Date(params.row.orderRentDate), 'yyyy-MM-dd hh:mm:ss'))
+            }
           },
           {
             title: '还球日期',
-            key: 'orderReturnDate'
+            key: 'orderReturnDate',
+            render: (h, params) => {
+              return h('span', DateUtil.formatDate(new Date(params.row.orderReturnDate), 'yyyy-MM-dd hh:mm:ss'))
+            }
           },
           {
             title: '预计花费',
@@ -191,7 +210,31 @@
             align: 'center',
             key: 'handle',
             render: (h, params) => {
+              let returnButton = '';
+              if (params.row.status === 'RENTALING') {
+                returnButton = h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  class: 'ivu-btn-edit',
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.orderBallData = [];
+                      this.orderBallData = this.data[params.index].balls;
+                      this.startDate = new Date(params.row.orderRentDate);
+                      this.endDate = new Date(params.row.orderReturnDate);
+                      this.returnIndex = params.index;
+                      this.returnBallModal = true;
+                    }
+                  }
+                }, '还球');
+              }
             return h('div', [
+              returnButton,
               h('Button', {
                 props: {
                   type: 'success',
@@ -229,6 +272,7 @@
         orderStatus: constants.codeType.order_status,
         orderStatusList: [],
         orderBallModal: false,
+        returnBallModal: false,
         orderBallColumns: [
           {
             type: 'index',
@@ -293,10 +337,43 @@
             key: 'count'
           }],
         orderBallData: [],
+        returnIndex: undefined,
+        startDate: undefined,
+        endDate: undefined,
         ballType: constants.codeType.ball_type,
         ballBrand: constants.codeType.ball_brand,
         ballTypeList: [],
         ballBrandList: [],
+      }
+    },
+    computed: {
+      getTotalCost() {
+        let cost = 0;
+        if (this.startDate) {
+          debugger
+          let startTime = this.startDate.getTime();
+          let returnTime = this.endDate.getTime();
+          let endTime = new Date().getTime();
+          let days = Math.floor((endTime - returnTime) / (3600 * 24 * 1e3)) + 1;
+          let dates = Math.floor((endTime - startTime) / (3600 * 24 * 1e3)) + 1;
+          if (days > 0) {
+            dates -= days;
+            this.orderBallData.map(item => {
+              cost += item.dayPrice2 * days;
+            })
+          }
+          if (dates < 30) {
+            this.orderBallData.map(item => {
+              cost += item.dayPrice1 * dates;
+            })
+          } else {
+            this.orderBallData.map(item => {
+              cost += item.monthPrice * Math.floor(dates / 30);
+              cost += item.dayPrice1 * (dates % 30)
+            })
+          }
+        }
+        return cost;
       }
     },
     methods: {
@@ -429,6 +506,19 @@
       getBallBrandList(data) {
         this.ballBrandList = data.data;
       },
+      handleReturn() {
+        let params = {
+          id: this.data[this.returnIndex],
+          cost: this.getTotalCost
+        };
+        this.$http.get('/return', params).then((res) => {
+          if (res.code === 200) {
+
+          } else {
+            this.$Message.error("还球失败")
+          }
+        });
+      }
     },
 
     created() {
