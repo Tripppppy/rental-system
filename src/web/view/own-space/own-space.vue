@@ -209,6 +209,10 @@
                 this.$refs['userForm'].validate((valid) => {
                     if (valid) {
                         this.ownSpaceLoading = true;
+                      this.userForm.roleIds = [];
+                      this.userInfo.roles.map(item => {
+                        this.userForm.roleIds.push(item.id);
+                      });
                         this.$http.put('/user/updateAdmin', this.userForm).then((res) => {
                             if (res.code === 200) {
                                 this.$Message.success('保存成功！');
