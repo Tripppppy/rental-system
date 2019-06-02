@@ -6,6 +6,7 @@
       </Badge>
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
+        <DropdownItem name="ownSpace">个人中心</DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -47,8 +48,12 @@ export default {
       switch (name) {
         case 'logout': this.logout()
           break
-        case 'message': this.message()
+        case 'ownSpace' : {
+          this.$router.push({
+            name: name
+          });
           break
+        }
       }
     }
   }

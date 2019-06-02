@@ -1,6 +1,7 @@
 import Main from '@/components/main'
 import roleRouter from './roleRouter'
 import userRouter from './userRouter'
+import ownSpace from './ownSpace'
 // *** insert import here *** // // don't change this line
 
 export default {
@@ -14,6 +15,7 @@ export default {
 	children: [
 		roleRouter,
 		userRouter,
+    ownSpace,
     {
       path: 'codeGroup',
 			name: 'code_group',

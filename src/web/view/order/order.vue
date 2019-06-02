@@ -1,9 +1,7 @@
 <!-- ClientCodeGenerator created on 2019/04/22-->
 <style lang="less">
     @import '../../styles/common.less';
-
 </style>
-
 <template>
     <div class="smart-crud-container">
 
