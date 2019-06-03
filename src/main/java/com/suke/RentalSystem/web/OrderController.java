@@ -1,10 +1,12 @@
 package com.suke.RentalSystem.web;
 
 import com.suke.RentalSystem.bo.OrderConfirmParamBO;
+import com.suke.RentalSystem.core.Constant;
 import com.suke.RentalSystem.core.Result;
 import com.suke.RentalSystem.core.ResultGenerator;
 import com.suke.RentalSystem.model.Ball;
 import com.suke.RentalSystem.model.Order;
+import com.suke.RentalSystem.model.User;
 import com.suke.RentalSystem.service.BallService;
 import com.suke.RentalSystem.service.OrderService;
 import com.github.pagehelper.PageHelper;
@@ -16,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,9 +59,18 @@ public class OrderController {
     }
 
     @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size, @RequestParam(required = false) String phoneNum) {
+        List<User> userList = null;
+        if (phoneNum != null) {
+            userList = userService.findByPhoneNum(phoneNum);
+        }
         PageHelper.startPage(page, size);
-        List<Order> list = orderService.findAll();
+        List<Order> list = new ArrayList<>();
+        if (userList != null) {
+            list = orderService.findAllByCond(userList);
+        } else {
+            list = orderService.findAll();
+        }
         list.forEach(item -> {
             item.setUser(userService.findById(item.getUserId()));
             List<Ball> ballList = ballService.findByOrderId(item.getId());
@@ -76,5 +88,20 @@ public class OrderController {
                                @RequestParam Double predictCost) {
         List<Long> list = orderService.orderConfirm(data, id, returnDate, predictCost);
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    @GetMapping("/return")
+    public Result returnBall(@RequestParam Long id, @RequestParam Double cost) {
+        orderService.returnBall(id, cost);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @GetMapping("/rental/{id}")
+    public Result rentalBall(@PathVariable Long id) {
+        Order order = orderService.findById(id);
+        order.setStatus(Constant.ORDER_STATUS_RENTALING);
+        order.setOrderRentDate(LocalDateTime.now());
+        orderService.updateByPK(order);
+        return ResultGenerator.genSuccessResult();
     }
 }

@@ -3,10 +3,12 @@ package com.suke.RentalSystem.service.impl;
 import com.suke.RentalSystem.bo.OrderConfirmParamBO;
 import com.suke.RentalSystem.core.Constant;
 import com.suke.RentalSystem.core.ResultCode;
+import com.suke.RentalSystem.core.ServiceException;
 import com.suke.RentalSystem.dao.OrderMapper;
 import com.suke.RentalSystem.model.Ball;
 import com.suke.RentalSystem.model.Order;
 import com.suke.RentalSystem.model.OrderBall;
+import com.suke.RentalSystem.model.User;
 import com.suke.RentalSystem.service.BallService;
 import com.suke.RentalSystem.service.OrderBallService;
 import com.suke.RentalSystem.service.OrderService;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.sql.rowset.serial.SerialException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -54,7 +57,7 @@ public class OrderServiceImpl extends AbstractService<Order> implements OrderSer
         if (stockIdList.isEmpty()) {
             Order order = new Order();
             order.setUserId(id);
-            order.setOrderRentDate(LocalDateTime.now());
+            order.setOrderDate(LocalDateTime.now());
             order.setOrderReturnDate(returnDate);
             order.setPredictCost(predictCost);
             order.setStatus(Constant.ORDER_STATUS_ORDERED);
@@ -72,5 +75,29 @@ public class OrderServiceImpl extends AbstractService<Order> implements OrderSer
             });
         }
         return stockIdList;
+    }
+
+    @Override
+    public void returnBall(Long id, Double cost) {
+        Order order = findById(id);
+        if (order != null) {
+            List<OrderBall> orderBallList = orderBallService.findByOrderId(id);
+            orderBallList.forEach(item -> {
+                Ball ball = ballService.findById(item.getBallId());
+                ball.setStock(ball.getStock() + item.getCount());
+                ballService.updateByPK(ball);
+            });
+            order.setCost(cost);
+            order.setOrderRealReturnDate(LocalDateTime.now());
+            order.setStatus(Constant.ORDER_STATUS_COMPLETE);
+            updateByPK(order);
+        } else {
+            throw new ServiceException("订单不存在");
+        }
+    }
+
+    @Override
+    public List<Order> findAllByCond(List<User> userList) {
+        return tblOrderMapper.findAllByCond(userList);
     }
 }

@@ -8,7 +8,9 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="order_rent_date" jdbcType="TIMESTAMP" property="orderRentDate" />
+    <result column="order_date" jdbcType="TIMESTAMP" property="orderDate" />
     <result column="order_return_date" jdbcType="TIMESTAMP" property="orderReturnDate" />
+    <result column="order_real_return_date" jdbcType="TIMESTAMP" property="orderRealReturnDate" />
     <result column="cost" jdbcType="DOUBLE" property="cost" />
     <result column="predict_cost" jdbcType="DOUBLE" property="predictCost" />
     <result column="status" jdbcType="VARCHAR" property="status" />
@@ -18,4 +20,17 @@
     <result column="last_modified_date" jdbcType="TIMESTAMP" property="lastModifiedDate" />
     <result column="version" jdbcType="INTEGER" property="version" />
   </resultMap>
+
+  <select id="findAllByCond" resultMap="BaseResultMap">
+    SELECT * FROM tbl_order
+    <where>
+      user_id in (
+      <if test="userList != null">
+        <foreach collection="userList" item="item" index="index" separator=",">
+          #{item.id}
+        </foreach>
+      </if>
+      )
+    </where>
+  </select>
 </mapper>

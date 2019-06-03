@@ -20,4 +20,6 @@ public interface UserService extends Service<User> {
     void deleteUser(Long userId);
 
     void updatePassword(User user);
+
+    List<User> findByPhoneNum(String phoneNum);
 }

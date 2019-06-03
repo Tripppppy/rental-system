@@ -114,4 +114,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
             updateByPK(user);
         }
     }
+
+    @Override
+    public List<User> findByPhoneNum(String phoneNum) {
+        return tblUserMapper.findByPhoneNum(phoneNum);
+    }
 }

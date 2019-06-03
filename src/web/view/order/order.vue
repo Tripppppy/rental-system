@@ -8,6 +8,7 @@
         <div class="smart-crud-top">
             <Row>
                 <Col span="24">
+                    手机号： <Input v-model="phoneNum" style="width: 150px" placeholder="请输入用户手机号，回车查询" @keydown.enter.native="reloadList"></Input>
                 </Col>
             </Row>
         </div>
@@ -92,13 +93,25 @@
 
         <Modal
                 v-model="returnBallModal"
-                width="200"
-                title="请确认还球金额"
+                width="280"
+                title="请确认球已入库，并确认还球金额"
                 :styles="{top: '20px'}">
             <p style="text-align: center">实际花费：{{getTotalCost}}</p>
             <div slot="footer">
                 <Button @click="returnBallModal = false" style="margin-left: 8px">取消</Button>
                 <Button type="primary" :loading="isSaving" @click="handleReturn()">确认还球</Button>
+            </div>
+        </Modal>
+
+        <Modal
+                v-model="rentalBallModal"
+                width="280"
+                title="请确认"
+                :styles="{top: '20px'}">
+            <p style="text-align: center">请确认球已全部借出！</p>
+            <div slot="footer">
+                <Button @click="rentalBallModal = false" style="margin-left: 8px">取消</Button>
+                <Button type="primary" :loading="isSaving" @click="handleRental()">确认租球</Button>
             </div>
         </Modal>
 
@@ -120,6 +133,7 @@
     },
     data() {
       return {
+        phoneNum: '',
         searchModel: undefined,
         orderForm: {
           orderReturnDate: undefined,
@@ -169,17 +183,39 @@
             }
           },
           {
-            title: '租球日期',
-            key: 'orderRentDate',
+            title: '下单日期',
+            key: 'orderDate',
             render: (h, params) => {
-              return h('span', DateUtil.formatDate(new Date(params.row.orderRentDate), 'yyyy-MM-dd hh:mm:ss'))
+              return h('span', DateUtil.formatDate(new Date(params.row.orderDate), 'yyyy-MM-dd'))
             }
           },
           {
-            title: '还球日期',
+            title: '预约还球日期',
             key: 'orderReturnDate',
             render: (h, params) => {
-              return h('span', DateUtil.formatDate(new Date(params.row.orderReturnDate), 'yyyy-MM-dd hh:mm:ss'))
+              return h('span', DateUtil.formatDate(new Date(params.row.orderReturnDate), 'yyyy-MM-dd'))
+            }
+          },
+          {
+            title: '租球日期',
+            key: 'orderRentDate',
+            render: (h, params) => {
+              if (params.row.orderRentDate) {
+                return h('span', DateUtil.formatDate(new Date(params.row.orderRentDate), 'yyyy-MM-dd'))
+              } else {
+                return h('span','无')
+              }
+            }
+          },
+          {
+            title: '实际还球日期',
+            key: 'orderRealReturnDate',
+            render: (h, params) => {
+              if (params.row.orderRealReturnDate) {
+                return h('span', DateUtil.formatDate(new Date(params.row.orderRealReturnDate), 'yyyy-MM-dd'))
+              } else {
+                return h('span','无')
+              }
             }
           },
           {
@@ -207,6 +243,7 @@
             title: '操作',
             align: 'center',
             key: 'handle',
+            width: 180,
             render: (h, params) => {
               let returnButton = '';
               let rentalButton = '';
@@ -243,6 +280,8 @@
                   },
                   on: {
                     click: () => {
+                      this.rentalIndex = params.index;
+                      this.rentalBallModal = true;
                     }
                   }
                 }, '租球');
@@ -288,6 +327,7 @@
         orderStatusList: [],
         orderBallModal: false,
         returnBallModal: false,
+        rentalBallModal: false,
         orderBallColumns: [
           {
             type: 'index',
@@ -353,6 +393,7 @@
           }],
         orderBallData: [],
         returnIndex: undefined,
+        rentalIndex: undefined,
         startDate: undefined,
         endDate: undefined,
         ballType: constants.codeType.ball_type,
@@ -365,7 +406,6 @@
       getTotalCost() {
         let cost = 0;
         if (this.startDate) {
-          debugger
           let startTime = this.startDate.getTime();
           let returnTime = this.endDate.getTime();
           let endTime = new Date().getTime();
@@ -397,8 +437,11 @@
         const self = this;
         const params = {
           page: this.pageInfo.pageNum || 1,
-          size: this.pageInfo.pageSize || 10
+          size: this.pageInfo.pageSize || 10,
         };
+        if (this.phoneNum) {
+          params.phoneNum = this.phoneNum;
+        }
         this.$http.get('/order', params).then((res) => {
           self.loading = false;
           if (res.code === 200) {
@@ -522,17 +565,38 @@
         this.ballBrandList = data.data;
       },
       handleReturn() {
+        this.isSaving = true;
         let params = {
-          id: this.data[this.returnIndex],
+          id: this.data[this.returnIndex].id,
           cost: this.getTotalCost
         };
-        this.$http.get('/return', params).then((res) => {
+        this.$http.get('/order/return', params).then((res) => {
           if (res.code === 200) {
-
+            this.$Message.success("还球成功");
+            this.returnBallModal = false;
+            this.reloadList();
           } else {
             this.$Message.error("还球失败")
           }
+          this.isSaving = false;
         });
+      },
+      handleRental() {
+        this.isSaving = true;
+        this.$http.get('/order/rental/' + this.data[this.rentalIndex].id).then((res) => {
+          if (res.code === 200) {
+            this.$Message.success("还球成功");
+            this.rentalBallModal = false;
+            this.reloadList();
+          } else {
+            this.$Message.error("还球失败")
+          }
+          this.isSaving = false;
+        });
+      },
+      reloadList() {
+        this.pageInfo.pageNum = 1;
+        this.getList();
       }
     },
 

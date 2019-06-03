@@ -49,6 +49,15 @@
       </if>
     </where>
   </select>
+  <select id="findByPhoneNum" resultMap="PageResultMap">
+    SELECT *
+    FROM tbl_user
+    <where>
+      <if test="phoneNum != null">
+        mobile like concat('%',#{phoneNum},'%')
+      </if>
+    </where>
+  </select>
 
   <update id="updateImageUrl">
       UPDATE tbl_user SET image_url = #{imageUrl}

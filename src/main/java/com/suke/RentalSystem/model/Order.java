@@ -24,10 +24,22 @@ public class Order {
     private LocalDateTime orderRentDate;
 
     /**
+     * 借球日期
+     */
+    @Column(name = "order_date")
+    private LocalDateTime orderDate;
+
+    /**
      * 还球日期
      */
     @Column(name = "order_return_date")
     private LocalDateTime orderReturnDate;
+
+    /**
+     * 还球日期
+     */
+    @Column(name = "order_real_return_date")
+    private LocalDateTime orderRealReturnDate;
 
     /**
      * 实际花费
@@ -258,5 +270,21 @@ public class Order {
 
     public void setPredictCost(Double predictCost) {
         this.predictCost = predictCost;
+    }
+
+    public LocalDateTime getOrderRealReturnDate() {
+        return orderRealReturnDate;
+    }
+
+    public void setOrderRealReturnDate(LocalDateTime orderRealReturnDate) {
+        this.orderRealReturnDate = orderRealReturnDate;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 }
