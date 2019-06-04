@@ -13,11 +13,14 @@ import com.suke.RentalSystem.service.BallService;
 import com.suke.RentalSystem.service.OrderBallService;
 import com.suke.RentalSystem.service.OrderService;
 import com.suke.RentalSystem.core.AbstractService;
+import com.suke.RentalSystem.service.UserService;
+import com.suke.RentalSystem.util.IpAddressUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,9 +38,11 @@ public class OrderServiceImpl extends AbstractService<Order> implements OrderSer
     private BallService ballService;
     @Resource
     private OrderBallService orderBallService;
+    @Resource
+    private UserService userService;
 
     @Override
-    public List<Long> orderConfirm(List<OrderConfirmParamBO> data, Long id, LocalDateTime returnDate, Double predictCost) {
+    public List<Long> orderConfirm(List<OrderConfirmParamBO> data, Long id, LocalDateTime returnDate, Double predictCost, String phoneNum, HttpServletRequest request) {
         List<Long> idList = data.stream().map(OrderConfirmParamBO::getId).collect(Collectors.toList());
         List<Ball> list = ballService.findByIdList(idList);
         List<Long> stockIdList = new ArrayList<>();
@@ -55,6 +60,17 @@ public class OrderServiceImpl extends AbstractService<Order> implements OrderSer
             });
         });
         if (stockIdList.isEmpty()) {
+            if (phoneNum != null) {
+                String ipAddress = IpAddressUtil.getIpAddress(request);
+                User user = new User();
+                user.setLoginName(ipAddress);
+                user.setMobile(phoneNum);
+                user.setName("游客");
+                user.setImageUrl("http://img.kimen.xyz/psb.png");
+                user.setType("visitor");
+                userService.save(user);
+                id = user.getId();
+            }
             Order order = new Order();
             order.setUserId(id);
             order.setOrderDate(LocalDateTime.now());

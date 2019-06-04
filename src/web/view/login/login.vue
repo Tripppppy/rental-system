@@ -34,7 +34,8 @@ export default {
       if (loginFormData.loginName === '游客') {
         this.setToken(JSON.stringify(loginFormData));
         loginFormData.imageUrl = 'http://img.kimen.xyz/psb.png';
-        loginFormData.roles = [{id: 30, code: 'ptUser'}]
+        loginFormData.id = 0;
+        loginFormData.roles = [{id: 30, code: 'ROLE_VISITOR'}]
         this.setUserIdentity(loginFormData);
         this.$router.push({
           name: this.$config.homeName

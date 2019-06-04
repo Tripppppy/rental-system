@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,13 +81,32 @@ public class OrderController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    @GetMapping("/my/{id}")
+    public Result myOrder(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size, @PathVariable Long id) {
+        PageHelper.startPage(page, size);
+        List<User> userList = new ArrayList<>();
+        User user = new User();
+        user.setId(id);
+        userList.add(user);
+        List<Order> list = orderService.findAllByCond(userList);
+        list.forEach(item -> {
+            item.setUser(userService.findById(item.getUserId()));
+            List<Ball> ballList = ballService.findByOrderId(item.getId());
+            item.setBalls(ballList);
+        });
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
     @PostMapping("/confirm/{id}")
     public Result orderConfirm(@RequestBody List<OrderConfirmParamBO> data,
                                @PathVariable Long id,
                                @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                @RequestParam LocalDateTime returnDate,
-                               @RequestParam Double predictCost) {
-        List<Long> list = orderService.orderConfirm(data, id, returnDate, predictCost);
+                               @RequestParam Double predictCost,
+                               @RequestParam(required = false) String phoneNum,
+                               HttpServletRequest request) {
+        List<Long> list = orderService.orderConfirm(data, id, returnDate, predictCost, phoneNum, request);
         return ResultGenerator.genSuccessResult(list);
     }
 

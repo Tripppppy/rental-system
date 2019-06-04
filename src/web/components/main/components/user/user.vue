@@ -6,7 +6,7 @@
       </Badge>
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
-        <DropdownItem name="ownSpace">个人中心</DropdownItem>
+        <DropdownItem v-if="!isVisitor" name="ownSpace">个人中心</DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -26,6 +26,20 @@ export default {
     messageUnreadCount: {
       type: Number,
       default: 0
+    }
+  },
+  computed: {
+    userIdentity() {
+      return this.$store.state.user.userIdentity;
+    },
+    isVisitor() {
+      let flag = false;
+      this.userIdentity.roles.map(item => {
+        if (item.code === 'ROLE_VISITOR') {
+          flag = true;
+        }
+      });
+      return flag;
     }
   },
   methods: {

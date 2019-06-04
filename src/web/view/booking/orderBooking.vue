@@ -114,6 +114,7 @@
                 :styles="{top: '20px'}">
             <span>还球时间：</span>
             <DatePicker v-model="returnDate" type="date" placeholder="请选择还球时间" style="width: 200px;margin-bottom: 20px" @on-change="getReturnDate"></DatePicker>
+            <Input v-model="phoneNum" v-if="isVisitor" placeholder="请输入手机号" style="width: 150px;margin-left: 30px"></Input>
             <Table :loading="confirmModalLoading" :columns="columns" :data="data"></Table>
             <p style="text-align: right;margin-top: 20px">预计花费：<span style="color: #ed2010;">￥{{getTotalCost}}</span></p>
             <div slot="footer">
@@ -233,7 +234,8 @@
             key: 'count'
           }],
         data: [],
-        returnDate: ''
+        returnDate: '',
+        phoneNum: undefined
       }
     },
     computed: {
@@ -258,6 +260,15 @@
           }
         }
         return cost;
+      },
+      isVisitor() {
+        let flag = false;
+        this.userIdentity.roles.map(item => {
+          if (item.code === 'ROLE_VISITOR') {
+            flag = true;
+          }
+        });
+        return flag;
       }
     },
     methods: {
@@ -387,6 +398,16 @@
       },
       totalProdList() {
         if (this.returnDate) {
+          let url = '/order/confirm/'
+            + this.userIdentity.id + "?returnDate="
+            + DateUtil.formatDate(this.returnDate, 'yyyy-MM-dd hh:mm:ss')
+            + "&predictCost=" + this.getTotalCost;
+          if (this.isVisitor && !this.phoneNum) {
+            this.$Message.warning("游客必须输入手机号")
+            return;
+          } else if (this.isVisitor && this.phoneNum) {
+            url += "&phoneNum=" + this.phoneNum;
+          }
           this.confirmButtonLoading = true;
           let data = [];
           this.sumList.map(item => {
@@ -395,10 +416,7 @@
               count: item.count
             })
           });
-          this.$http.post('/order/confirm/'
-            + this.userIdentity.id + "?returnDate="
-            + DateUtil.formatDate(this.returnDate, 'yyyy-MM-dd hh:mm:ss')
-            + "&predictCost=" + this.getTotalCost, data).then((res) => {
+          this.$http.post(url, data).then((res) => {
             if (res.code === 200) {
               if (res.data && res.data.length) {
                 this.resetColumns();
