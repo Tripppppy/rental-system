@@ -15,12 +15,6 @@
             <Pattern>%d %-5level [%thread] %logger{0}: %msg%n</Pattern>
         </encoder>
     </appender>
-    <!--
-        <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-            <queueSize>512</queueSize>
-            <appender-ref ref="FILE"/>
-        </appender>
-    -->
 
     <logger name="com.suke.RentalSystem" level="DEBUG"/>
 

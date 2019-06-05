@@ -12,9 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
-* Created by CodeGenerator on 2019/05/22.
-*/
+
 @RestController
 @RequestMapping("/order/ball")
 public class OrderBallController {

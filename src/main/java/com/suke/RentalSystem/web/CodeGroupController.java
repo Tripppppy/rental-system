@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
-* Created by smartsoft on 2018/09/07.
-*/
+
 @RestController
 @RequestMapping("/codeGroup")
 public class CodeGroupController {

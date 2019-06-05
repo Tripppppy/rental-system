@@ -22,9 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
-* Created by CodeGenerator on 2019/04/22.
-*/
+
 @RestController
 @RequestMapping("/order")
 public class OrderController {

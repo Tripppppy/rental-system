@@ -585,11 +585,11 @@
         this.isSaving = true;
         this.$http.get('/order/rental/' + this.data[this.rentalIndex].id).then((res) => {
           if (res.code === 200) {
-            this.$Message.success("还球成功");
+            this.$Message.success("租球成功");
             this.rentalBallModal = false;
             this.reloadList();
           } else {
-            this.$Message.error("还球失败")
+            this.$Message.error("租球失败")
           }
           this.isSaving = false;
         });

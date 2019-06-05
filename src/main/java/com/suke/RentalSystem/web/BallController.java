@@ -14,9 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
-* Created by CodeGenerator on 2019/04/22.
-*/
 @RestController
 @RequestMapping("/ball")
 public class BallController {

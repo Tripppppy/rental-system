@@ -11,9 +11,6 @@ import javax.annotation.Resource;
 import java.util.List;
 
 
-/**
- * Created by CodeGenerator on 2019/05/22.
- */
 @Service
 @Transactional
 public class OrderBallServiceImpl extends AbstractService<OrderBall> implements OrderBallService {

@@ -2,10 +2,7 @@ package com.suke.RentalSystem.util;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @Author: Jinmeng Tang
- * @Date: Created in 2018/7/20 上午9:40
- */
+
 public class IpAddressUtil {
 
     public static String getIpAddress(HttpServletRequest request) {
